@@ -14,7 +14,7 @@ export class PedManager {
             ped.dimension = this.defaultPedParameters.dimension;
             ped.invincible = this.defaultPedParameters.invincible;
             this.pedStorage.addPed(ped);
-        });  
+        });
     }
 
     //проверка что PedID из команды входит в npcs.length

@@ -2,6 +2,12 @@
 export const defaultTickInterval = 1000;    //время в ms
 export const defaultbuffDuration = 60000; // 60 000 ms = 1 min
 
+export const baseObjectType = {
+    Player: 0,
+    Vehicle: 1,
+    Ped: 2
+}
+
 export const buffInfoList = {
     medicalHelp: 
         {
@@ -15,7 +21,7 @@ export const buffInfoList = {
     drunk: 
         {
             name: 'drunk',
-            allowedEntities: 'Player',
+            allowedEntities: 'Vehicle',
             stackable: true,
             maxStacks: 3,
             tickInterval: defaultTickInterval,
@@ -34,7 +40,7 @@ export const buffInfoList = {
         {
             name: 'fear',
             allowedEntities: 'Ped',
-            stackable: false,
+            stackable: true,
             tickInterval: defaultTickInterval,
             buffDuration: defaultbuffDuration
         },

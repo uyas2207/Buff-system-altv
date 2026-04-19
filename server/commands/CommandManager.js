@@ -19,5 +19,23 @@ export class CommandManager {
         chat.registerCmd('get_buffs_all', () => { // /get_buffs_all - Получить все существующие баффы (команда для дебага потом можно убрать)
             alt.emit('get_buffs_all');
         });
+
+        //дебаг команды, потом удалить
+        chat.registerCmd('info', (player, arg) => { // /get_buffs_all - Получить все существующие баффы (команда для дебага потом можно убрать)
+            alt.log('arg[0]', arg[0]);
+            alt.log('arg[1]', arg[1]);
+            alt.log('arg[2]', arg[2]);
+            alt.log('arg[3]', arg[3]);
+            alt.log('arg[4]', arg[4]);
+        });
+
+        alt.on('consoleCommand', (command, ...arg) => {
+            if (command === 'getbuffs'){
+                alt.emit('get_buffs_all');
+            }
+            if (command === 'addbuff'){
+                alt.emit('add_buff', null, ...arg);
+            }
+        });
     }
 }
