@@ -13,6 +13,7 @@ export class PedManager {
             const ped = new alt.Ped( npc.model, new alt.Vector3(npc.position.x, npc.position.y, npc.position.z), new alt.Vector3(npc.rotation.x, npc.rotation.y, npc.rotation.z));
             ped.dimension = this.defaultPedParameters.dimension;
             ped.invincible = this.defaultPedParameters.invincible;
+            ped.health = 150;
             this.pedStorage.addPed(ped);
         });
     }

@@ -25,9 +25,9 @@ export class BuffStorage {
         const entityBuffs = this.#allEntitiesActiveBuffsMap.get(entity);
         return entityBuffs.get(buffName)
     }
-    //удалить бафф из обей map
-    removeBuffFromMap() {
-
+    //передает данные о всех активных бафах на определенном entity
+    getAllEntityBuffs(entity){
+        return this.#allEntitiesActiveBuffsMap.get(entity);
     }
     //метод для дебага (потом можно убрать)
     printAllActiveBuffs() {
@@ -40,7 +40,8 @@ export class BuffStorage {
                 const recalculatedTime = {
                     ...data,
                     appliedAt: new Date(data.appliedAt).toLocaleString(),
-                    expiresAt: new Date(data.expiresAt).toLocaleString()
+                    expiresAt: new Date(data.expiresAt).toLocaleString(),
+                    lastTickAt: new Date(data.lastTickAt).toLocaleString()
                 };
                 alt.log(`Buff: ${buffName}`, recalculatedTime);
             });
@@ -62,8 +63,31 @@ export class BuffStorage {
             */
     }
 
-    // перебор всех маршрутов с колбэком
+    //перебор всех бафов с колбэком
     forEachBuff(callback){
+        this.#allEntitiesActiveBuffsMap.forEach((buffs, entity) => {
+            buffs.forEach((instance, buffName) => {
+                callback(entity, buffName, instance);
+            });
+        });
+    }
+    //удаляет баф с названиме buffName у переданного entity
+    removeBuffFromMap(entity, buffName) {
+        const entityBuffs = this.#allEntitiesActiveBuffsMap.get(entity);
+        if (!entityBuffs){
+            alt.logError('Ошибка, попытка удалить баф у несуществующего в allEntitiesActiveBuffsMap entity');
+            return;
+        }
 
+        entityBuffs.delete(buffName);
+
+        //удаляет entity если баффов больше нет
+        if (entityBuffs.size === 0) {
+            this.#allEntitiesActiveBuffsMap.delete(entity);
+        }
+        
+        //Дебаг, потом удалить
+        alt.log(`allEntitiesActiveBuffsMap после удаления бафа ${buffName}, у entity.type ${entity.type}, c entity.id ${entity.id}`);
+        this.printAllActiveBuffs();
     }
 }

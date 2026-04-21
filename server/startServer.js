@@ -2,24 +2,27 @@ import * as alt from 'alt-server';
 
 import { defaultPedParameters } from './config/serverPedConfig.js';
 import { npcs } from './config/serverPedConfig.js';
-import { buffInfoList } from '../shared/buffsConfig.js';
-import { baseObjectType } from '../shared/buffsConfig.js';
+import { buffInfoList } from './config/buffsConfig.js';
+import { baseObjectType } from './config/buffsConfig.js';
 
-import { PedManager } from './classes/peds/PedManager.js';
-import { PedStorage } from './classes/peds/PedStorage.js';
+import { PedManager } from './peds/PedManager.js';
+import { PedStorage } from './peds/PedStorage.js';
 import { CommandManager } from './commands/CommandManager.js'
-import { BuffStorage } from './classes/buffs/BuffStorage.js'
-import { BuffManager } from './classes/buffs/BuffManager.js'
+import { BuffStorage } from './buffs/BuffStorage.js'
+import { BuffManager } from './buffs/BuffManager.js'
+import { BuffTickManager } from './buffs/BuffTickManager.js'
 
 class BuffServer {
     constructor(){
-        this.pedStorage = new PedStorage();
-        this.pedManager = new PedManager(defaultPedParameters, this.pedStorage, npcs);
-        this.commandManager = new CommandManager();
         this.buffStorage = new BuffStorage();
+        this.pedStorage = new PedStorage();  
+        this.pedManager = new PedManager(defaultPedParameters, this.pedStorage, npcs);       
+        
         this.buffManager = new BuffManager(this.buffStorage, buffInfoList, baseObjectType, this.pedStorage);
-
-
+        this.buffTickManager = new BuffTickManager(this.buffStorage, this.buffManager, buffInfoList);
+        
+        this.commandManager = new CommandManager(this.buffTickManager);
+        
         this.#init();
     }
 
@@ -38,15 +41,15 @@ class BuffServer {
             this.createDemonstrationScene();
             //await new Promise(resolve => alt.setTimeout(resolve, 1000));
             
-            alt.emit('add_buff', null, ['fear', 'Ped', 1, 1 ]);
+            //alt.emit('add_buff', null, ['fear', 'Ped', 1, 1, 1, 1]);
             
             //await new Promise(resolve => alt.setTimeout(resolve, 1000));
+            //alt.emit('add_buff', null, ['invisible', 'Ped', 1, 1 ]);
+            alt.emit('add_buff', null, ['medicalHelp', 'Ped', 1, 1, 1, 1]);
             alt.emit('add_buff', null, ['invisible', 'Ped', 1, 1 ]);
-            alt.emit('add_buff', null, ['fear', 'Ped', 1, 1 ]);
-            alt.emit('add_buff', null, ['invisible', 'Ped', 1, 1 ]);
-            alt.emit('add_buff', null, ['armor_regen', 'Ped', 2, 1 ]);
+            //alt.emit('add_buff', null, ['armor_regen', 'Ped', 2, 1 ]);
 
-            alt.emit('add_buff', null, ['фыв', 'Player', 1, 1 ]);
+            //alt.emit('add_buff', null, ['фыв', 'Player', 1, 1 ]);
             this.buffStorage.printAllActiveBuffs();
             
             
@@ -57,7 +60,7 @@ class BuffServer {
 
             //const tempConst = "Ped";
             //alt.log('baseObjectType.Ped', baseObjectType[tempConst]);
-            //const ped =  alt.BaseObject.getByID(baseObjectType[tempConst], 1);
+            //const ped =  alt.BaseObject.getByID(2, 1);
             //alt.log('ped.id',ped.id);//this.buffStorage.printSingleBuff(ped);
             //alt.log("\n alt.Ped.getByID(1)", ped.);
             //this.printPedInfo(ped);

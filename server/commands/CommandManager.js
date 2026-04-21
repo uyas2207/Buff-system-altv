@@ -2,7 +2,10 @@ import * as alt from 'alt-server';
 import * as chat from 'alt:chat';
 
 export class CommandManager {
-
+    //не забыть убрать constructor и buffTickManager
+    constructor(buffTickManager){
+        this.buffTickManager = buffTickManager;
+    }
     registerCommands() {
         chat.registerCmd('add_buff', (player, arg) => { // /add_buff [buffName],[targetType],[targetId]
             alt.emit('add_buff', player, arg);
@@ -28,14 +31,18 @@ export class CommandManager {
             alt.log('arg[3]', arg[3]);
             alt.log('arg[4]', arg[4]);
         });
-
+        
         alt.on('consoleCommand', (command, ...arg) => {
             if (command === 'getbuffs'){
                 alt.emit('get_buffs_all');
             }
-            if (command === 'addbuff'){
-                alt.emit('add_buff', null, ...arg);
+            if (command === 'create_tick'){
+                this.buffTickManager.create_GlobalBuffTick();
+            }
+            if (command === 'remove_tick'){
+                this.buffTickManager.remove_GlobalBuffTick();
             }
         });
     }
 }
+//81,  79

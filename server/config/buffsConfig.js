@@ -1,6 +1,10 @@
+//import * as alt from 'alt-server';
+
+import { MedicalHelpBuff } from '../buffs/buffTypes/MedicalHelpBuff.js'
+
 //не забыть изменить на 10 секунд
 export const defaultTickInterval = 1000;    //время в ms
-export const defaultbuffDuration = 60000; // 60 000 ms = 1 min
+export const defaultbuffDuration = 2000; // 60 000 ms = 1 min
 
 export const baseObjectType = {
     Player: 0,
@@ -9,18 +13,10 @@ export const baseObjectType = {
 }
 
 export const buffInfoList = {
-    medicalHelp: 
-        {
-            name: 'medicalHelp',
-            allowedEntities: 'Player',
-            stackable: true,
-            maxStacks: 3,
-            tickInterval: defaultTickInterval,
-            buffDuration: defaultbuffDuration
-        },
+[MedicalHelpBuff.id]: MedicalHelpBuff,
     drunk: 
         {
-            name: 'drunk',
+            id: 'drunk',
             allowedEntities: 'Vehicle',
             stackable: true,
             maxStacks: 3,
@@ -29,7 +25,7 @@ export const buffInfoList = {
         },
     armor_regen: 
         {
-            name: 'armor_regen',
+            id: 'armor_regen',
             allowedEntities: 'Ped',
             stackable: true,
             maxStacks: 3,
@@ -38,19 +34,32 @@ export const buffInfoList = {
         },
     fear:  
         {
-            name: 'fear',
+            id: 'fear',
             allowedEntities: 'Ped',
             stackable: true,
+            maxStacks: 3,
             tickInterval: defaultTickInterval,
             buffDuration: defaultbuffDuration
         },
     invisible:
         {
-            name: 'invisible',
+            id: 'invisible',
             allowedEntities: ['Player', 'Ped'],
             stackable: false,
             tickInterval: defaultTickInterval,
-            buffDuration: defaultbuffDuration
+            buffDuration: defaultbuffDuration,
+            
+            onApply(entity, instance) {
+                console.log(`[Buff invisible] empty onApply`);
+            },
+
+            onTick(entity, instance) {
+                console.log(`[Buff invisible] empty onTick`);
+            },
+
+            onRemove(entity, instance) {
+                console.log(`[Buff invisible] empty onRemove`);
+            }
         }
 };
 
