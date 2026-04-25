@@ -29,9 +29,10 @@ class BuffServer {
     #init(){
         alt.on('playerConnect', async (player) => {
             player.spawn(-1269.91, -1438.64, 4.46);
-            await new Promise(resolve => alt.setTimeout(resolve, 1000));
             
-            this.printPedInfo(player);
+            //await new Promise(resolve => alt.setTimeout(resolve, 1000));
+            
+            //this.printPedInfo(player);
             //alt.emit('add_buff', null, ['invisible', player, 1, 1 ]);
             //this.buffStorage.printAllActiveBuffs();
         });
@@ -40,13 +41,13 @@ class BuffServer {
             this.commandManager.registerCommands();
             this.createDemonstrationScene();
             //await new Promise(resolve => alt.setTimeout(resolve, 1000));
-            
+            //this.buffTickManager.create_GlobalBuffTick();
             //alt.emit('add_buff', null, ['fear', 'Ped', 1, 1, 1, 1]);
             
             //await new Promise(resolve => alt.setTimeout(resolve, 1000));
             //alt.emit('add_buff', null, ['invisible', 'Ped', 1, 1 ]);
             alt.emit('add_buff', null, ['medicalHelp', 'Ped', 1, 1, 1, 1]);
-            alt.emit('add_buff', null, ['invisible', 'Ped', 1, 1 ]);
+            //alt.emit('add_buff', null, ['invisible', 'Ped', 1, 1 ]);
             //alt.emit('add_buff', null, ['armor_regen', 'Ped', 2, 1 ]);
 
             //alt.emit('add_buff', null, ['фыв', 'Player', 1, 1 ]);
@@ -60,13 +61,20 @@ class BuffServer {
 
             //const tempConst = "Ped";
             //alt.log('baseObjectType.Ped', baseObjectType[tempConst]);
-            //const ped =  alt.BaseObject.getByID(2, 1);
+            const ped =  alt.BaseObject.getByID(2, 1);
             //alt.log('ped.id',ped.id);//this.buffStorage.printSingleBuff(ped);
             //alt.log("\n alt.Ped.getByID(1)", ped.);
             //this.printPedInfo(ped);
             //alt.log('ped.type', ped.type);
             //alt.log('BaseObjectType', alt.BaseObject.getByID(2, 1));
             //alt.log(`\n ped.type = ${baseObjectType[ped.type]}`);
+
+            //const range = 10;
+            //const allowedTypes = 2;
+            //const dimension = ped.dimension;
+            //const position = ped.pos;
+//            alt.getEntitiesInRange(position, range, dimension, allowedTypes);
+            //alt.log('alt.getEntitiesInRange(position, range, dimension, allowedTypes).count =', alt.getEntitiesInRange(position, range, dimension, allowedTypes).length);
         });
     }
 

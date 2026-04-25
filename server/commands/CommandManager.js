@@ -33,7 +33,7 @@ export class CommandManager {
         });
         
         alt.on('consoleCommand', (command, ...arg) => {
-            if (command === 'getbuffs'){
+            if (command === 'get_buffs_all'){
                 alt.emit('get_buffs_all');
             }
             if (command === 'create_tick'){
@@ -42,7 +42,19 @@ export class CommandManager {
             if (command === 'remove_tick'){
                 this.buffTickManager.remove_GlobalBuffTick();
             }
+            if (command === 'medicalHelp'){
+                alt.emit('add_buff', null, ['medicalHelp', 'Ped', 1, 2]);
+            }
+            if(command === 'hp'){
+                const entity = alt.BaseObject.getByID(2, 1);
+                entity.health = 1;
+            }
+            if(command === 'changeStacksAmmount'){
+                const entity = alt.BaseObject.getByID(2, 1);
+                const stacks = parseInt(arg[0]);
+                alt.log('arg', stacks);
+                alt.emit('changeStacksAmmount', entity, 'medicalHelp', stacks);
+            }
         });
     }
 }
-//81,  79

@@ -17,7 +17,6 @@ export class BuffManager {
             } catch (error) {
                 alt.logError('Ошибка при добавлении баффа:', error.message);
             }
-            
         });
         alt.on('remove_buff', (player, arg) => {
             
@@ -46,19 +45,18 @@ export class BuffManager {
         const buffName = String(args[0]);    //medicalHelp, drunk, armor_regen, fear, invisible
         let targetType = args[1];            // Player, Vehicle, Ped или сразу BaseObjectType.id (0, 1, 2)
         const targetId = args[2];            // id entety которому будет назначен баф (например Player с id=2)
-        let stacksAmmount = args[3] || 1;      //изначальное значение стаков бафа
-        const source =  args[4] || 'default source';
-        
+        let stacksAmmount = parseInt(args[3]) || 1;      //изначальное значение стаков бафа
+        const source =  args[4] || 'default source';    //источник бафа нужен был по тз, функционала у него никакого нет
+
         const now = Date.now();     //время в которое назначен баф
         //проверка коректности полученных данных, если данные некорректные код дальше не идет
         this.#validate_BuffName(buffName);   //проверяет существует ли баф с таким названием в конфиге, если нет останваливает выполнение кода
         targetType = this.#validate_TargetType(targetType);  //переводит Player, Vehicle, Ped в BaseObjectType.id (при необходимости) и проверяет сущетсует ли такой BaseObjectType.id в конифиге, если нет останваливает выполнение кода
         const entity = this.#validate_TargetId(targetType, targetId);    //проверяет существует ли BaseObjectType с таким id на сервере, если да возвращает этот entity, если нет останваливает выполнение кода
-        this.#validate_stacksAmmount(stacksAmmount);    //проверяет что переданное кол-во стаков число, если нет останваливает выполнение кода
-        //проверяет можно ли стакать баф и что значение переданного args[3] числовое
+        //проверяет можно ли стакать баф, если нет то стак будет = 1
         if ((this.#isStackableBuff(buffName) === true)){
             stacksAmmount = this.#handleBuffStacking(entity, buffName, stacksAmmount); //меняет кол-во стаков на бафе если оно не максимальное
-        }
+        } else{ stacksAmmount = 1; }
         //данные которые будут записаны соответвующему entity в соответсвующий buffName
         const instance = {
             buffName: this.buffInfoList[buffName].id,
@@ -77,6 +75,10 @@ export class BuffManager {
     removeBuff(entity, buffName){
         this.buffInfoList[buffName].onRemove(entity, buffName);
         this.buffStorage.removeBuffFromMap(entity, buffName);
+    }
+    //изменяет кол-во стаков у бафа в BuffStorage при этом не изменяя его время завершения
+    changeStacksAmmountInMap(entity, buffName, newStacks){
+        this.buffStorage.changeStacksAmmount(entity, buffName, newStacks);
     }
 
     //проверяет существует ли баф с таким названием в конфиге, если нет останваливает выполнение кода
@@ -111,6 +113,8 @@ export class BuffManager {
     }
 
     #validate_stacksAmmount(stacksAmmount){
+        alt.log('stacksAmmount', stacksAmmount);
+        alt.log('typeof stacksAmmount', typeof stacksAmmount);
         if (typeof stacksAmmount !== "number"){
             throw new Error('Ошибка в методе #validate_stacksAmmount, stacksAmmount !== "number"');
         }
