@@ -10,10 +10,12 @@ export class BuffBase {
     static buffDuration = 5000;
 
     static onApply(entity, instance) {
+        entity.setSyncedMeta(`${this.id}`, true);
         console.log(`[Buff ${id}] empty onApply`);
     }
 
     static onRemove(entity, instance) {
+        entity.setSyncedMeta(`${this.id}`, false);
         console.log(`[Buff ${id}] empty onRemove`);
     }
 }

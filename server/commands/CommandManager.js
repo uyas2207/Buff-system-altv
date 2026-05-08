@@ -31,15 +31,22 @@ export class CommandManager {
             alt.log('arg[3]', arg[3]);
             alt.log('arg[4]', arg[4]);
         });
+
+        chat.registerCmd('test_ped', (player, arg) => { // /get_buffs_all - Получить все существующие баффы (команда для дебага потом можно убрать)
+            const id = parseInt(arg[0]);
+            const entity = alt.BaseObject.getByID(2, id)
+            alt.emitClient(player, 'print_ped_info', entity);
+            
+        });
         
         alt.on('consoleCommand', (command, ...arg) => {
             if (command === 'get_buffs_all'){
                 alt.emit('get_buffs_all');
             }
-            if (command === 'create_tick'){
+            if (command === 'tick'){
                 this.buffTickManager.create_GlobalBuffTick();
             }
-            if (command === 'remove_tick'){
+            if (command === 'untick'){
                 this.buffTickManager.remove_GlobalBuffTick();
             }
             if (command === 'medicalHelp'){

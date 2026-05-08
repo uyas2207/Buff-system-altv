@@ -31,7 +31,7 @@ class BuffServer {
             player.spawn(-1269.91, -1438.64, 4.46);
             
             //await new Promise(resolve => alt.setTimeout(resolve, 1000));
-            
+            //alt.emitClient(player, 'client:reciveBuffsMetaKeys', );
             //this.printPedInfo(player);
             //alt.emit('add_buff', null, ['invisible', player, 1, 1 ]);
             //this.buffStorage.printAllActiveBuffs();
@@ -40,6 +40,7 @@ class BuffServer {
         alt.on('resourceStart', async () => {
             this.commandManager.registerCommands();
             this.createDemonstrationScene();
+
             //await new Promise(resolve => alt.setTimeout(resolve, 1000));
             //this.buffTickManager.create_GlobalBuffTick();
             //alt.emit('add_buff', null, ['fear', 'Ped', 1, 1, 1, 1]);

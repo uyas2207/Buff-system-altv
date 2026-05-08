@@ -11,7 +11,7 @@ export class BuffTickManager {
         this.buffInfoList = buffInfoList;
         this.#globalBuffTick = null;
 
-        this.create_GlobalBuffTick();
+        //this.create_GlobalBuffTick();
     }
 
     create_GlobalBuffTick() {

@@ -9,14 +9,14 @@ export class InvisibleBuff extends BuffBase {
 //    static buffDuration = defaultBuffDuration;
 
     static onApply(entity, instance) {
-        entity.visible = false;
-        entity.setSyncedMeta('visible', false);
+        //entity.visible = false;
+        entity.setSyncedMeta(`${this.id}`, true);
         console.log(`[InvisibleBuff] Applied to ${entity.id}, stacks: ${instance.stacks}`);
     }
 
     static onRemove(entity, instance) {
-        entity.visible = true;
-        entity.setSyncedMeta('visible', true);
+        //entity.visible = true;
+        entity.setSyncedMeta(`${this.id}`, false);
         console.log(`[InvisibleBuff] Removed from entity.type:${entity.type}, entity.id:${entity.id}`);
     }
 }

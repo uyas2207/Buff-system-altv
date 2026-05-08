@@ -46,7 +46,7 @@ export class BuffManager {
         let targetType = args[1];            // Player, Vehicle, Ped или сразу BaseObjectType.id (0, 1, 2)
         const targetId = args[2];            // id entety которому будет назначен баф (например Player с id=2)
         let stacksAmmount = parseInt(args[3]) || 1;      //изначальное значение стаков бафа
-        const source =  args[4] || 'default source';    //источник бафа нужен был по тз, функционала у него никакого нет
+        const source =  args[4] || player;    //источник бафа нужен был по тз, функционал есть только у бафа fear
 
         const now = Date.now();     //время в которое назначен баф
         //проверка коректности полученных данных, если данные некорректные код дальше не идет

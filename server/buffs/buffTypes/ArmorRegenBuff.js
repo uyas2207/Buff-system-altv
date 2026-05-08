@@ -6,6 +6,7 @@ export class ArmorRegenBuff extends BuffBase {
     static stackable = true;
     static maxStacks = 3;
     static maxArmour = 150;
+    static defaultRegeneration = 5;
 //    static tickInterval = defaultTickInterval;
 //    static buffDuration = defaultBuffDuration;
 
@@ -15,8 +16,8 @@ export class ArmorRegenBuff extends BuffBase {
     }
 
     static onTick(entity, instance) {
-        if (entity.armour < ArmorRegenBuff.maxArmour) {
-            entity.armour = Math.min(ArmorRegenBuff.maxArmour, entity.armour + 5 * instance.stacks);
+        if (entity.armour < this.maxArmour) {
+            entity.armour = Math.min(this.maxArmour, entity.armour + instance.stacks * this.defaultRegeneration);
         }
         console.log('entity.armour', entity.armour);
     }

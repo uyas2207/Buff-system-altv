@@ -20,10 +20,10 @@ export class MedicalHelpBuff extends BuffBase {
     }
 
     //так как по тз кол-во стаков бафа зависит от кол-ва игроков, но при этом как и у остальных бафов кол-во стаков так же может выстаялться вручную
-    //берется максимально значение, либо кол-во стаков выставленное в ручную либо кол-во игроков в радиусе 10 метров (не больше максимального значения стаков прописанное в конфиге)
+    //берется максимальное значение, либо кол-во стаков выставленное в ручную либо кол-во игроков в радиусе 10 метров (не больше максимального значения стаков прописанное в конфиге)
     static onTick(entity, instance) {
-        const playersInRange = alt.getEntitiesInRange(entity.pos, MedicalHelpBuff.playersSearchRange, entity.dimension, MedicalHelpBuff.allowedGetEntitiesInRangeTypes).length;
-        const currentStacksAmmount = Math.min(MedicalHelpBuff.maxStacks, Math.max(playersInRange, instance.stacks));
+        const playersInRange = alt.getEntitiesInRange(entity.pos, this.playersSearchRange, entity.dimension, this.allowedGetEntitiesInRangeTypes).length;
+        const currentStacksAmmount = Math.min(this.maxStacks, Math.max(playersInRange, instance.stacks));
         alt.log('currentStacksAmmount =', currentStacksAmmount);
         if (entity.health < entity.maxHealth) {
             entity.health = Math.min(entity.maxHealth, entity.health + 5 * currentStacksAmmount);
