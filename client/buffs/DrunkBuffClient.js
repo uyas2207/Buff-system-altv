@@ -24,14 +24,18 @@ export class DrunkBuffClient extends ClientBuffBase {
         this.addDrunkBuffVisuals(entity, value);
     }
     
-    addDrunkBuffVisuals(entity, value){
+    static addDrunkBuffVisuals(entity, value){
         native.setPedMovementClipset(entity, drunkAnimDictionary[value], 1.0);
-        native.shakeGameplayCam("DRUNK_SHAKE", value);
+        if (entity.type === 18) { // entity.type === 18 это LocalPlayer
+            native.shakeGameplayCam("DRUNK_SHAKE", value);
+        }
     }
 
-    removeDrunkBuffVisuals(entity){
+    static removeDrunkBuffVisuals(entity){
         native.resetPedMovementClipset(entity, 1.0);
-        native.shakeGameplayCam(false);
+        if (entity.type === 18) { // entity.type === 18 это LocalPlayer
+            native.shakeGameplayCam(false);
+        }
     }
 /*
     static onMetaRemove(entity) {

@@ -1,6 +1,6 @@
 import * as alt from 'alt-server';
 
-export class BuffStorage {
+export class ActiveBuffsStorage {
     #allEntitiesActiveBuffsMap;
 
     constructor() {

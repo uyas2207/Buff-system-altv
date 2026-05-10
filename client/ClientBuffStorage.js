@@ -5,7 +5,7 @@ const handlers = [
     DrunkBuffClient,
     InvisibleBuffClient,
 ];
-export const clientBuffStorage = new Map(
+export const ClientBuffStorage = new Map(
     //handlers.map(({ handler }) => ({ [key.metaKey]: key }))
     handlers.map((handler) => [handler.metaKey, handler])
 );

@@ -1,6 +1,6 @@
 import { BuffBase } from './BuffBase.js'
 
-export class ArmorRegenBuff extends BuffBase {
+export default class ArmorRegenBuff extends BuffBase {
     static id = 'armorRegen';
     static allowedEntities = ['Player', 'Ped'];
     static stackable = true;
@@ -26,3 +26,5 @@ export class ArmorRegenBuff extends BuffBase {
         console.log(`[ArmorRegenBuff] Removed from entity.type:${entity.type}, entity.id:${entity.id}`);
     }
 }
+
+console.log('Файл ArmorRegenBuff импортировался');

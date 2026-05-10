@@ -3,9 +3,11 @@ import * as chat from 'alt:chat';
 
 export class CommandManager {
     //не забыть убрать constructor и buffTickManager
-    constructor(buffTickManager){
+    constructor(buffTickManager, serverBuffList){
         this.buffTickManager = buffTickManager;
+        this.serverBuffList = serverBuffList;
     }
+    
     registerCommands() {
         chat.registerCmd('add_buff', (player, arg) => { // /add_buff [buffName],[targetType],[targetId]
             alt.emit('add_buff', player, arg);
@@ -61,6 +63,9 @@ export class CommandManager {
                 const stacks = parseInt(arg[0]);
                 alt.log('arg', stacks);
                 alt.emit('changeStacksAmmount', entity, 'medicalHelp', stacks);
+            }
+            if(command === 'bufflist'){
+                this.serverBuffList.getAll();
             }
         });
     }

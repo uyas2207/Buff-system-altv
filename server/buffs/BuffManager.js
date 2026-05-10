@@ -1,9 +1,8 @@
 import * as alt from 'alt-server';
-import * as chat from 'alt:chat';
 
 export class BuffManager {
-    constructor(buffStorage, buffInfoList, baseObjectType, pedStorage) {
-        this.buffStorage = buffStorage;
+    constructor(activeBuffsStorage, buffInfoList, baseObjectType, pedStorage) {
+        this.activeBuffsStorage = activeBuffsStorage;
         this.buffInfoList = buffInfoList;       //данные из конфига о существующих бафах и их характеристиках
         this.baseObjectType = baseObjectType;   //данные из конфига о BaseObjectType.id соответвующие Player, Vehicle, Ped
 
@@ -29,7 +28,7 @@ export class BuffManager {
         });
         //метод для дебага (потом можно убрать)
         alt.on('get_buffs_all', () => {
-            this.buffStorage.printAllActiveBuffs();
+            this.activeBuffsStorage.printAllActiveBuffs();
         });
     }
 
@@ -40,7 +39,7 @@ export class BuffManager {
             alt.log(`${buff}`);
         });
     }
-    //основной метод класса, проверяет коретность данных и если все правильно записывает баф в класс buffStorage
+    //основной метод класса, проверяет коретность данных и если все правильно записывает баф в класс ActiveBuffsStorage
     add_buff(player, args) {
         const buffName = String(args[0]);    //medicalHelp, drunk, armor_regen, fear, invisible
         let targetType = args[1];            // Player, Vehicle, Ped или сразу BaseObjectType.id (0, 1, 2)
@@ -68,17 +67,17 @@ export class BuffManager {
             source: source
         };
 
-        this.buffStorage.addBuffToMap(entity, buffName, instance);  //записывает баф в класс buffStorage
+        this.activeBuffsStorage.addBuffToMap(entity, buffName, instance);  //записывает баф в класс ActiveBuffsStorage
         this.buffInfoList[buffName].onApply(entity, instance);
     }
 
     removeBuff(entity, buffName){
         this.buffInfoList[buffName].onRemove(entity, buffName);
-        this.buffStorage.removeBuffFromMap(entity, buffName);
+        this.activeBuffsStorage.removeBuffFromMap(entity, buffName);
     }
-    //изменяет кол-во стаков у бафа в BuffStorage при этом не изменяя его время завершения
+    //изменяет кол-во стаков у бафа в ActiveBuffsStorage при этом не изменяя его время завершения
     changeStacksAmmountInMap(entity, buffName, newStacks){
-        this.buffStorage.changeStacksAmmount(entity, buffName, newStacks);
+        this.activeBuffsStorage.changeStacksAmmount(entity, buffName, newStacks);
     }
 
     //проверяет существует ли баф с таким названием в конфиге, если нет останваливает выполнение кода
@@ -124,7 +123,7 @@ export class BuffManager {
     #handleBuffStacking(entity, buffName, stacks){
         let stacksAmmount = 0;  //изначальное кол-во стаков бафа в случае если это первая запись о бафе и у него нет никаких стаков
         const maxAllowedStacks = this.buffInfoList[buffName].maxStacks;
-        if (this.buffStorage.hasActiveBuff(entity, buffName)){
+        if (this.activeBuffsStorage.hasActiveBuff(entity, buffName)){
             stacksAmmount = this.#getBuffStacksAmmount(entity, buffName);    //получает текуще кол-во стаков этого бафа на entity
         }
 
@@ -134,7 +133,7 @@ export class BuffManager {
     }
     //получает текуще кол-во стаков бафа buffName на entity
     #getBuffStacksAmmount(entity, buffName){
-        return this.buffStorage.getEntityBuff(entity, buffName).stacks;
+        return this.activeBuffsStorage.getEntityBuff(entity, buffName).stacks;
     }
     //проверяет можно ли стакать баф с таким buffName
     #isStackableBuff(buffName){

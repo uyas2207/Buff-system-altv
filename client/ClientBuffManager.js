@@ -2,8 +2,8 @@
 import * as alt from 'alt-client';
 
 export class ClientBuffManager {
-    constructor(clientBuffStorage){
-        this.clientBuffStorage = clientBuffStorage;
+    constructor(clientActiveBuffsStorage){
+        this.clientActiveBuffsStorage = clientActiveBuffsStorage;
         this.awaitingEntities = new Map(); //Map<'type:id', Array<Function>>
         this.#registerEventListeners();
     }
@@ -19,7 +19,7 @@ export class ClientBuffManager {
     }
 
     #handleEntityCreate(entity){
-        this.clientBuffStorage.forEach((handler, metaKey) => {
+        this.clientActiveBuffsStorage.forEach((handler, metaKey) => {
             if (!entity.hasSyncedMeta(metaKey)) return;
 
             const value = entity.getSyncedMeta(metaKey);
@@ -41,7 +41,7 @@ export class ClientBuffManager {
     }
     
     #handleSyncedMetaChange(entity, key, value, oldValue) {
-        const handler = this.#clientBuffStorage.get(key);
+        const handler = this.#clientActiveBuffsStorage.get(key);
         if (!handler) return;
 
         // Ped без netOwner — откладываем действие до gameEntityCreate
@@ -83,7 +83,7 @@ export class ClientBuffManager {
     /*
     #handleSyncedMetaChange(entity, key, value, oldValue){
         alt.log('handleSyncedMetaChange:', entity, key, value, oldValue);
-        const handler = this.clientBuffStorage.get(key);
+        const handler = this.clientActiveBuffsStorage.get(key);
         if (!handler) return;
         //метод для работы с ped без netOwner (т.к для педов без netOwner нельзя применить нативки)
         if(entity.netOwner === null && entity.type === 2){
@@ -121,8 +121,8 @@ export class ClientBuffManager {
 import * as alt from 'alt-client';
 
 export class ClientBuffManager {
-    constructor(clientBuffStorage){
-        this.clientBuffStorage = clientBuffStorage;
+    constructor(clientActiveBuffsStorage){
+        this.clientActiveBuffsStorage = clientActiveBuffsStorage;
         this.#registerEventListeners();
     }
 
@@ -132,12 +132,13 @@ export class ClientBuffManager {
         });
 
         alt.on('syncedMetaChange', (entity, metaKey, value, oldValue) => {
+            if (entity.streamed === false) return;
             this.#handleSyncedMetaChange(entity, metaKey, value, oldValue);
         });
     }
 
     #handleEntityCreate(entity){
-        this.clientBuffStorage.forEach((handler, metaKey) => {
+        this.clientActiveBuffsStorage.forEach((handler, metaKey) => {
             if (!entity.hasSyncedMeta(metaKey)) return;
 
             const value = entity.getSyncedMeta(metaKey);
@@ -148,7 +149,7 @@ export class ClientBuffManager {
     }
 
     #handleSyncedMetaChange(entity, metaKey, value, oldValue){
-        const handler = this.clientBuffStorage.get(metaKey);
+        const handler = this.clientActiveBuffsStorage.get(metaKey);
         if (!handler) return;
         
         handler.onMetaChange(entity, value, oldValue);

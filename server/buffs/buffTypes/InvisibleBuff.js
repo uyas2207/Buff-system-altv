@@ -1,6 +1,6 @@
 import { BuffBase } from './BuffBase.js'
 
-export class InvisibleBuff extends BuffBase {
+export default class InvisibleBuff extends BuffBase {
     static id = 'invisible';
     static allowedEntities = ['Player', 'Ped'];
     static stackable = false;
@@ -20,3 +20,5 @@ export class InvisibleBuff extends BuffBase {
         console.log(`[InvisibleBuff] Removed from entity.type:${entity.type}, entity.id:${entity.id}`);
     }
 }
+
+console.log('Файл InvisibleBuff импортировался');

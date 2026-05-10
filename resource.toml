@@ -1,5 +1,7 @@
 type = 'js'
-main = 'server/startServer.js'
-client-main = 'client/startClient.js'
-client-files = [ 'client/*' ]
+main = "dist/server/server.js"
+client-main = "dist/client/client.js"
+client-files = [
+    "dist/client/client.js"
+]
 deps = [ 'chat' ]

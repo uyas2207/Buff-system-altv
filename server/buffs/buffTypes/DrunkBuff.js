@@ -1,6 +1,6 @@
 import { BuffBase } from './BuffBase.js'
 
-export class DrunkBuff extends BuffBase {
+export default class DrunkBuff extends BuffBase {
     static id = 'drunk';
     static allowedEntities = ['Player', 'Ped'];
     static stackable = true;
@@ -20,3 +20,5 @@ export class DrunkBuff extends BuffBase {
         console.log(log);
     }
 }
+
+console.log('Файл DrunkBuff импортировался');

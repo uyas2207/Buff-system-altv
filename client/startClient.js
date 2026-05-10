@@ -1,17 +1,19 @@
 import * as alt from 'alt-client';
 import * as native from 'natives';
 
-import { clientBuffStorage } from './ClientBuffStorage.js'
+import { ClientBuffStorage } from './ClientBuffStorage.js'
 
 import { AnimationManager } from './AnimationManager.js';
 import { ClientBuffManager } from './ClientBuffManager.js'
 
+import { testShared } from '../shared/shared.js'
 
 class BuffClient {
     constructor(){
         this.animationManager = new AnimationManager();
-        this.clientBuffManager = new ClientBuffManager(clientBuffStorage);
+        this.clientBuffManager = new ClientBuffManager(ClientBuffStorage);
         this.#init();
+        testShared.onTick();
     }
 
     #init(){

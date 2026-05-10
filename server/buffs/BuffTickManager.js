@@ -5,8 +5,8 @@ export class BuffTickManager {
     
     static #SYSTEM_TICK_MS = 500;   //стандартное значение времени с каким промежутком выполняется тик бафов
 
-    constructor(buffStorage, buffManager, buffInfoList) {
-        this.buffStorage = buffStorage;
+    constructor(activeBuffsStorage, buffManager, buffInfoList) {
+        this.activeBuffsStorage = activeBuffsStorage;
         this.buffManager = buffManager;
         this.buffInfoList = buffInfoList;
         this.#globalBuffTick = null;
@@ -30,7 +30,7 @@ export class BuffTickManager {
         const TICK_TOLERANCE_MS = 100;
         const toRemove = [];
 
-        this.buffStorage.forEachBuff((entity, buffName, instance) => {
+        this.activeBuffsStorage.forEachBuff((entity, buffName, instance) => {
             if (!entity.valid) {
                 toRemove.push({ entity, buffName });
                 return;

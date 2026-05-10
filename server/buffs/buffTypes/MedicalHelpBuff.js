@@ -1,8 +1,9 @@
 import * as alt from 'alt-server';
 
 import { BuffBase } from './BuffBase.js'
+//import { BuffRegistry } from '../BuffRegistry.js';
 
-export class MedicalHelpBuff extends BuffBase {
+export default class MedicalHelpBuff extends BuffBase {
     static id = 'medicalHelp';
     static allowedEntities = ['Player', 'Ped'];
     static stackable = true;
@@ -16,7 +17,7 @@ export class MedicalHelpBuff extends BuffBase {
 
     static onApply(entity, instance) {
         alt.log(`[medicalHelp] Applied to ${entity.id}, stacks: ${instance.stacks}`);
-        this.onTick(entity, instance);
+        //this.onTick(entity, instance);
     }
 
     //так как по тз кол-во стаков бафа зависит от кол-ва игроков, но при этом как и у остальных бафов кол-во стаков так же может выстаялться вручную
@@ -35,3 +36,7 @@ export class MedicalHelpBuff extends BuffBase {
         alt.log(`[medicalHelp] Removed from entity.type:${entity.type}, entity.id:${entity.id}`);
     }
 }
+
+console.log('Файл MedicalHelpBuff импортировался');
+
+//BuffRegistry.register(FearBuff);

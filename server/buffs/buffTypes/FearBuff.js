@@ -1,6 +1,6 @@
 import { BuffBase } from './BuffBase.js'
 
-export class FearBuff extends BuffBase {
+export default class FearBuff extends BuffBase {
     static id = 'fear';
     static allowedEntities = ['Ped'];
     static stackable = false;
@@ -19,3 +19,5 @@ export class FearBuff extends BuffBase {
     }
         
 }
+
+console.log('Файл FearBuff импортировался');
