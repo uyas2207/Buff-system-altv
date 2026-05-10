@@ -22,7 +22,21 @@ export class ServerBuffList {
     }
 
     getAll() {
-        console.log('buffList = ',this.#buffList);
+        //console.log('buffList = ',this.#buffList);
         return this.#buffList;
+    }
+
+    // перебор всех бафов с колбэком
+    forEachBuff(callback) {
+        this.#buffList.forEach((value, key) => {
+            callback(value);
+        });
+    }
+
+    testStackable(buffId){
+        const test = this.#buffList.get(buffId);
+        const testStackable = test.stackable;
+        console.log('buffId', buffId);
+        console.log('testStackable', testStackable);
     }
 }

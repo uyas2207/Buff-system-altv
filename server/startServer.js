@@ -1,12 +1,11 @@
 import * as alt from 'alt-server';
 //для работы с файлами
 import * as fs from 'fs';
-import { fileURLToPath } from 'url';
 import path from 'path';
 
 import { defaultPedParameters } from './config/serverPedConfig.js';
 import { npcs } from './config/serverPedConfig.js';
-import { buffInfoList } from './config/buffsConfig.js';
+//import { buffInfoList } from './config/buffsConfig.js';
 import { baseObjectType } from './config/buffsConfig.js';
 
 import { PedManager } from './peds/PedManager.js';
@@ -17,15 +16,6 @@ import { BuffManager } from './buffs/BuffManager.js'
 import { BuffTickManager } from './buffs/BuffTickManager.js'
 
 import { ServerBuffList } from './buffs/ServerBuffList.js'
-/*
-import { MedicalHelpBuff } from '@buffTypes/MedicalHelpBuff.js'
-import { DrunkBuff } from '@buffTypes/DrunkBuff.js'
-import { ArmorRegenBuff } from '@buffTypes/ArmorRegenBuff.js'
-import { FearBuff } from '@buffTypes/FearBuff.js'
-import { InvisibleBuff } from '@buffTypes/InvisibleBuff.js'
-
-import { testShared } from '../shared/shared.js'
-*/
 
 class BuffServer {
     constructor(){
@@ -35,11 +25,12 @@ class BuffServer {
 
         this.pedManager = new PedManager(defaultPedParameters, this.pedStorage, npcs);       
         
-        this.buffManager = new BuffManager(this.activeBuffsStorage, buffInfoList, baseObjectType, this.pedStorage);
-        this.buffTickManager = new BuffTickManager(this.activeBuffsStorage, this.buffManager, buffInfoList);
+        this.buffManager = new BuffManager(this.activeBuffsStorage, this.serverBuffList, baseObjectType, this.pedStorage);
+        this.buffTickManager = new BuffTickManager(this.activeBuffsStorage, this.buffManager, this.serverBuffList);
 
 
-        this.commandManager = new CommandManager(this.buffTickManager, this.serverBuffList);
+        this.commandManager = new CommandManager(this.buffTickManager, this.serverBuffList, this.buffManager);
+
         //MedicalHelpBuff.onApply();
         this.#init();
     }
@@ -60,7 +51,7 @@ class BuffServer {
             this.createDemonstrationScene();
             this.registerAllBuffs('./resources/buff-system/server/buffs/buffTypes');
 
-            //alt.emit('add_buff', null, ['medicalHelp', 'Ped', 1, 1, 1, 1]);
+            alt.emit('add_buff', null, ['medicalHelp', 'Ped', 1, 1, 1, 1]);
             
 
             //await new Promise(resolve => alt.setTimeout(resolve, 1000));
@@ -119,14 +110,6 @@ class BuffServer {
 
     registerAllBuffs(buffTypesPath){
         //'./resources/buff-system/server/buffs/buffTypes'
-        
-        //защита от передачи некорректного buffTypesPath, что бы код продолжил работать даже если был передан некорректный адрес расположения классов бафов
-        try {
-            path.resolve(buffTypesPath);
-        } catch (error) {
-            alt.logError('error:', error);
-        }
-        
         const folderpath = path.resolve(buffTypesPath);
         const files = fs.readdirSync(folderpath);
 

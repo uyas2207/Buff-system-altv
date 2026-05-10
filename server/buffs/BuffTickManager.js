@@ -5,10 +5,10 @@ export class BuffTickManager {
     
     static #SYSTEM_TICK_MS = 500;   //стандартное значение времени с каким промежутком выполняется тик бафов
 
-    constructor(activeBuffsStorage, buffManager, buffInfoList) {
+    constructor(activeBuffsStorage, buffManager, serverBuffList) {
         this.activeBuffsStorage = activeBuffsStorage;
         this.buffManager = buffManager;
-        this.buffInfoList = buffInfoList;
+        this.serverBuffList = serverBuffList;
         this.#globalBuffTick = null;
 
         //this.create_GlobalBuffTick();
@@ -41,7 +41,7 @@ export class BuffTickManager {
                 return;
             }
 
-            const buffInfo = this.buffInfoList[buffName];
+            const buffInfo = this.serverBuffList.get(buffName);
             
             if (now + TICK_TOLERANCE_MS - instance.lastTickAt >= instance.tickInterval) {
                 

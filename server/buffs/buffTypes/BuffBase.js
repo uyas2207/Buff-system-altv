@@ -18,4 +18,9 @@ export class BuffBase {
         entity.setSyncedMeta(`${this.id}`, false);
         console.log(`[Buff ${id}] empty onRemove`);
     }
+/* 
+    static onTick(){
+        return;
+    }
+ */
 }

@@ -17,7 +17,7 @@ export default class MedicalHelpBuff extends BuffBase {
 
     static onApply(entity, instance) {
         alt.log(`[medicalHelp] Applied to ${entity.id}, stacks: ${instance.stacks}`);
-        //this.onTick(entity, instance);
+        this.onTick(entity, instance);
     }
 
     //так как по тз кол-во стаков бафа зависит от кол-ва игроков, но при этом как и у остальных бафов кол-во стаков так же может выстаялться вручную

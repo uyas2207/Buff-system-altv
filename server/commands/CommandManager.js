@@ -3,9 +3,10 @@ import * as chat from 'alt:chat';
 
 export class CommandManager {
     //не забыть убрать constructor и buffTickManager
-    constructor(buffTickManager, serverBuffList){
+    constructor(buffTickManager, serverBuffList, buffManager){
         this.buffTickManager = buffTickManager;
         this.serverBuffList = serverBuffList;
+        this.buffManager = buffManager;
     }
     
     registerCommands() {
@@ -66,6 +67,12 @@ export class CommandManager {
             }
             if(command === 'bufflist'){
                 this.serverBuffList.getAll();
+            }
+            if(command === 'printAllExistingMessage'){
+                this.buffManager.printAllExistingMessage();
+            }
+            if(command === 'test_stackable'){
+                alt.emit('test_stackable', 'medicalHelp');
             }
         });
     }
