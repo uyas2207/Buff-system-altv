@@ -1,7 +1,8 @@
-import { BuffBase } from './BuffBase.js'
+import { ServerBuffBase } from './ServerBuffBase.js'
+import { BuffIds } from '@shared/SharedConfig.js'
 
-export default class ArmorRegenBuff extends BuffBase {
-    static id = 'armorRegen';
+export default class ArmorRegenBuff extends ServerBuffBase {
+    static id = BuffIds.ARMOR_REGEN;
     static allowedEntities = ['Player', 'Ped'];
     static stackable = true;
     static maxStacks = 3;

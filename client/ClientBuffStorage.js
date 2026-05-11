@@ -1,5 +1,5 @@
-import { DrunkBuffClient } from './buffs/DrunkBuffClient.js'
-import { InvisibleBuffClient } from './buffs/InvisibleBuffClient.js'
+import { DrunkBuffClient } from './buffs/buffTypes/ClientDrunkBuff.js'
+import { InvisibleBuffClient } from './buffs/buffTypes/ClientInvisibleBuff.js'
 
 const handlers = [
     DrunkBuffClient,

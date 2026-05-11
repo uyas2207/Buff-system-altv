@@ -40,7 +40,8 @@ return [
         extensions: ['.js'],
 
         alias: {
-          
+          '@shared': path.resolve(__dirname, 'shared'),
+          '@BuffTypes': path.resolve(__dirname, 'client/buffs/buffTypes'),
         }
 
       },
@@ -48,7 +49,7 @@ return [
       externals: {
         'alt-client': 'alt-client',
         'natives': 'natives',
-        //'alt-shared': 'alt-shared'
+        'alt-shared': 'alt-shared'
       },
       module: commonModule,
       optimization: {
@@ -90,7 +91,7 @@ return [
 
         alias: {
           '@shared': path.resolve(__dirname, 'shared'),
-          '@buffTypes': path.resolve(__dirname, 'server/buffs/buffTypes'),
+          '@BuffTypes': path.resolve(__dirname, 'server/buffs/buffTypes'),
         }
 
       },

@@ -1,42 +1,29 @@
-export class ServerBuffList {
-    #buffList;
+import * as alt from 'alt-server';
+//для работы с файлами
+import * as fs from 'fs';
+import path from 'path';
 
+import { default as BuffList } from '@shared/BuffList.js'
+
+export class ServerBuffList extends BuffList{
+    #clientBuffFilesNames;
     constructor(){
-        this.#buffList = new Map();
-    }
-    
-    register(buffClass) {
-        if (this.#buffList.has(buffClass.id)) {
-            throw new Error(`Buff ${buffClass.id} already registered`);
-        }
-
-        this.#buffList.set(buffClass.id, buffClass);
+        super()
+        this.#clientBuffFilesNames = [];
     }
 
-    get(buffId) {
-        return this.#buffList.get(buffId);
+    async processAllbuffsFiles(serverBuffsTypesPath, clientBuffsTypesPath){
+        const serverBuffsFilesNames = this.#scanBuffFiles(serverBuffsTypesPath, 'Buff.js');
+        this.#clientBuffFilesNames = this.#scanBuffFiles(clientBuffsTypesPath, 'Buff.js');
+        await this.registerAllBuffTypes(serverBuffsFilesNames);
     }
 
-    has(buffId) {
-        return this.#buffList.has(buffId);
+    #scanBuffFiles(buffTypesPath, endOfFileName){
+        const folderpath = path.resolve(buffTypesPath);
+        return fs.readdirSync(folderpath).filter(file => file.endsWith(endOfFileName));
     }
 
-    getAll() {
-        //console.log('buffList = ',this.#buffList);
-        return this.#buffList;
-    }
-
-    // перебор всех бафов с колбэком
-    forEachBuff(callback) {
-        this.#buffList.forEach((value, key) => {
-            callback(value);
-        });
-    }
-
-    testStackable(buffId){
-        const test = this.#buffList.get(buffId);
-        const testStackable = test.stackable;
-        console.log('buffId', buffId);
-        console.log('testStackable', testStackable);
+    sendClientBuffList(player){
+        alt.emitClient(player, 'buffs:registerClientBuffs', this.#clientBuffFilesNames);
     }
 }

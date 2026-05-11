@@ -1,5 +1,5 @@
 export class ClientBuffBase {
-    static metaKey = null;
+    static id = null;
     
     static onMetaChange(entity, value, oldValue) {
         console.log('empty onMetaChange');

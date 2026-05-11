@@ -1,31 +1,36 @@
 import * as alt from 'alt-client';
 import * as native from 'natives';
-
-import { ClientBuffStorage } from './ClientBuffStorage.js'
+ 
+//import { ClientBuffStorage } from './ClientBuffStorage.js'
 
 import { AnimationManager } from './AnimationManager.js';
 import { ClientBuffManager } from './ClientBuffManager.js'
 
-import { testShared } from '../shared/shared.js'
+import { default as ClientBuffList } from '@shared/BuffList.js'
+//import { BuffIds } from '@shared/SharedConfig.js'
 
 class BuffClient {
     constructor(){
         this.animationManager = new AnimationManager();
-        this.clientBuffManager = new ClientBuffManager(ClientBuffStorage);
+        this.clientBuffList = new ClientBuffList();
+        this.clientBuffManager = new ClientBuffManager(this.clientBuffList);
         this.#init();
-        testShared.onTick();
     }
 
     #init(){
         alt.onServer('print_ped_info', (entity) => {
-            alt.log("=== ВСЁ О PED ===");
-            for (let key in entity) {
-                try {
-                    alt.log(`${key} = ${entity[key]}`);
-                } catch (error) {
-                    // нужно что бы код продолжил выполняться после ошибки если она будет
-                }
-            }
+            console.log('entity, entity');
+            native.taskReactAndFleePed(entity, entity);
+        });
+
+        alt.onServer('print_ped_info_2', (entity) => {
+            console.log('entity, alt.Player.local');
+            native.taskReactAndFleePed(entity, alt.Player.local);
+        });       
+
+        alt.onServer('buffs:registerClientBuffs', async (clientBuffFilesNames) => {
+            console.log('Пришел ивент с сервера на регистрацию бафов:', clientBuffFilesNames);
+            await this.clientBuffList.registerAllBuffTypes(clientBuffFilesNames);
         });
         
         /*
@@ -38,7 +43,7 @@ class BuffClient {
             alt.log('visible =', entity.visible);
         });
 */
-        alt.on('consoleCommand', (command, ...arg) => {
+        alt.on('consoleCommand', async (command, ...arg) => {
             if (command === 'shakeGameplayCam'){
                 
                 const intesity = parseFloat(arg[0]);
@@ -79,6 +84,20 @@ class BuffClient {
                 }
             }
 
+            if(command === 'test_bufflist'){
+                alt.log('buffList');
+                alt.log('Существующие бафы:');
+                this.clientBuffList.forEachBuff((buffClass) => {
+                    alt.log(`${buffClass.id}`);
+                });
+            }
+
+            if(command === 'test_import'){
+                /* const buffClass = */ await import(`@BuffTypes/ClientInvisibleBuff.js`);
+            }
+            if(command === 'test_import_2'){
+                /* const buffClass = */ await import(`./buffs/buffTypes/ClientInvisibleBuff.js`);
+            }
         });
 /*        
         alt.on('syncedMetaChange', (entity, key, value, oldValue) => {
@@ -96,7 +115,6 @@ class BuffClient {
         });
         */
     }
-
 }
 
 new BuffClient;

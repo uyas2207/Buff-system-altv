@@ -1,8 +1,8 @@
 import * as native from 'natives';
 import { ClientBuffBase } from './ClientBuffBase.js';
 
-export class InvisibleBuffClient extends ClientBuffBase {
-    static metaKey = 'invisible';
+export default class ClientInvisibleBuff extends ClientBuffBase {
+    static id = 'invisible';
 
     static onEntityCreate(entity, value) {
         native.setEntityVisible(entity, !value, !value);
@@ -17,3 +17,4 @@ export class InvisibleBuffClient extends ClientBuffBase {
     }
 */
 }
+console.log('Произошел импорт InvisibleBuffClient');

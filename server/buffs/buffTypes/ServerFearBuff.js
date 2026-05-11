@@ -1,7 +1,8 @@
-import { BuffBase } from './BuffBase.js'
+import { ServerBuffBase } from './ServerBuffBase.js'
+import { BuffIds } from '@shared/SharedConfig.js'
 
-export default class FearBuff extends BuffBase {
-    static id = 'fear';
+export default class FearBuff extends ServerBuffBase {
+    static id = BuffIds.FEAR;
     static allowedEntities = ['Ped'];
     static stackable = false;
     static maxStacks = 1;
@@ -9,7 +10,7 @@ export default class FearBuff extends BuffBase {
 //    static buffDuration = defaultBuffDuration;
 
     static onApply(entity, instance) {
-        entity.setSyncedMeta(`${this.id}`, true, instance.source);
+        entity.setSyncedMeta(`${this.id}`, [true, instance.source]);
         console.log(`[FearBuff] Applied to ${entity.id}, stacks: ${instance.stacks}`);
     }
 

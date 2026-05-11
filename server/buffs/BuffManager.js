@@ -35,13 +35,13 @@ export class BuffManager {
             //this.testStacks(buffName);
             const buffClass = this.serverBuffList.get(buffName);
             //buffClass.onApply();
-/* 
+ 
             console.log('buffClass.stackable', buffClass.stackable);
             console.log('buffClass.id', buffClass.id);
             console.log('buffClass.buffDuration', buffClass.buffDuration);
             console.log('buffClass.tickInterval', buffClass.tickInterval);
             console.log('buffClass.maxStacks', buffClass.maxStacks);
- */
+ 
         });
     }
 
@@ -135,19 +135,11 @@ export class BuffManager {
 
         return entity;
     }
-
-    #validate_stacksAmmount(stacksAmmount){
-        alt.log('stacksAmmount', stacksAmmount);
-        alt.log('typeof stacksAmmount', typeof stacksAmmount);
-        if (typeof stacksAmmount !== "number"){
-            throw new Error('Ошибка в методе #validate_stacksAmmount, stacksAmmount !== "number"');
-        }
-    }
     //добавляет к текущему кол-ву стаков то количестов стаков которое было передано как stacks
     //если после этого текщуее кол-во становится большек максимально допустимого кол-ва стаков меняет его на максимальное допустимое кол-во стаков
     #handleBuffStacking(entity, buffName, stacks, maxAllowedStacks){
         let stacksAmmount = 0;  //изначальное кол-во стаков бафа в случае если это первая запись о бафе и у него нет никаких стаков
-        //const maxAllowedStacks = this.buffInfoList[buffName].maxStacks;
+        
         if (this.activeBuffsStorage.hasActiveBuff(entity, buffName)){
             stacksAmmount = this.#getBuffStacksAmmount(entity, buffName);    //получает текуще кол-во стаков этого бафа на entity
         }
@@ -159,9 +151,5 @@ export class BuffManager {
     //получает текуще кол-во стаков бафа buffName на entity
     #getBuffStacksAmmount(entity, buffName){
         return this.activeBuffsStorage.getEntityBuff(entity, buffName).stacks;
-    }
-    //проверяет можно ли стакать баф с таким buffName
-    #isStackableBuff(buffName){
-        //return this.buffInfoList[buffName].stackable;
     }
 }

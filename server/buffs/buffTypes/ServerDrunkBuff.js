@@ -1,7 +1,8 @@
-import { BuffBase } from './BuffBase.js'
+import { ServerBuffBase } from './ServerBuffBase.js'
+import { BuffIds } from '@shared/SharedConfig.js'
 
-export default class DrunkBuff extends BuffBase {
-    static id = 'drunk';
+export default class DrunkBuff extends ServerBuffBase {
+    static id = BuffIds.DRUNK;
     static allowedEntities = ['Player', 'Ped'];
     static stackable = true;
     static maxStacks = 3;

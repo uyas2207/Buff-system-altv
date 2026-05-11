@@ -1,7 +1,8 @@
-import { BuffBase } from './BuffBase.js'
+import { ServerBuffBase } from './ServerBuffBase.js'
+import { BuffIds } from '@shared/SharedConfig.js'
 
-export default class InvisibleBuff extends BuffBase {
-    static id = 'invisible';
+export default class InvisibleBuff extends ServerBuffBase {
+    static id = BuffIds.INVISIBLE;
     static allowedEntities = ['Player', 'Ped'];
     static stackable = false;
     static maxStacks = 1;

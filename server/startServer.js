@@ -1,11 +1,7 @@
 import * as alt from 'alt-server';
-//для работы с файлами
-import * as fs from 'fs';
-import path from 'path';
 
 import { defaultPedParameters } from './config/serverPedConfig.js';
 import { npcs } from './config/serverPedConfig.js';
-//import { buffInfoList } from './config/buffsConfig.js';
 import { baseObjectType } from './config/buffsConfig.js';
 
 import { PedManager } from './peds/PedManager.js';
@@ -16,6 +12,8 @@ import { BuffManager } from './buffs/BuffManager.js'
 import { BuffTickManager } from './buffs/BuffTickManager.js'
 
 import { ServerBuffList } from './buffs/ServerBuffList.js'
+
+import { BuffIds } from '@shared/SharedConfig.js'
 
 class BuffServer {
     constructor(){
@@ -33,12 +31,14 @@ class BuffServer {
 
         //MedicalHelpBuff.onApply();
         this.#init();
+        console.log('BuffIds.ARMOR_REGEN', BuffIds.ARMOR_REGEN);
     }
 
     #init(){
         alt.on('playerConnect', (player) => {
             player.spawn(-1269.91, -1438.64, 4.46);
-
+            this.serverBuffList.sendClientBuffList(player);
+            //this.serverBuffList.scanBuffFiles('./resources/buff-system/client/buffs/buffTypes', BuffClient);
             //await new Promise(resolve => alt.setTimeout(resolve, 1000));
             //alt.emitClient(player, 'client:reciveBuffsMetaKeys', );
             //this.printPedInfo(player);
@@ -48,10 +48,14 @@ class BuffServer {
 
         alt.on('resourceStart', () => {
             this.commandManager.registerCommands();
+            this.serverBuffList.processAllbuffsFiles('./resources/buff-system/server/buffs/buffTypes', './resources/buff-system/client/buffs/buffTypes');
             this.createDemonstrationScene();
-            this.registerAllBuffs('./resources/buff-system/server/buffs/buffTypes');
+            //this.serverBuffList.registerAllServerBuffs('./resources/buff-system/server/buffs/buffTypes');
+            
+            //this.registerAllBuffs('./resources/buff-system/server/buffs/buffTypes');
 
-            alt.emit('add_buff', null, ['medicalHelp', 'Ped', 1, 1, 1, 1]);
+
+            //alt.emit('add_buff', null, ['medical_help', 'Ped', 1, 1, 1, 1]);
             
 
             //await new Promise(resolve => alt.setTimeout(resolve, 1000));
@@ -64,7 +68,7 @@ class BuffServer {
             //alt.emit('add_buff', null, ['armor_regen', 'Ped', 2, 1 ]);
 
             //alt.emit('add_buff', null, ['фыв', 'Player', 1, 1 ]);
-            this.activeBuffsStorage.printAllActiveBuffs();
+            //this.activeBuffsStorage.printAllActiveBuffs();
             
             
             //this.buffManager.validate_targetId(1, 1);
@@ -107,19 +111,22 @@ class BuffServer {
         // можно в будущем добавить vehicleManager
         //new alt.Vehicle('benson', -1275.78, -1434.56, 4.54, 0, 0, 0.56621);
     }
-
+/* 
     registerAllBuffs(buffTypesPath){
-        //'./resources/buff-system/server/buffs/buffTypes'
-        const folderpath = path.resolve(buffTypesPath);
-        const files = fs.readdirSync(folderpath);
+
+        const files = this.#scanBuffFiles(buffTypesPath, 'Buff.js');
 
         files.forEach( async file => {
-            if (file.endsWith('Buff.js')){
-                const calss = await import(`@buffTypes/${file}`);
+                const calss = await import(`@BuffTypes/${file}`);
                 this.serverBuffList.register(calss.default);
-            };
         });
     }
+
+    #scanBuffFiles(buffTypesPath, endOfFileName){
+        const folderpath = path.resolve(buffTypesPath);
+        return fs.readdirSync(folderpath).filter(file => file.endsWith(endOfFileName));
+    }
+     */
 }
 
 new BuffServer;

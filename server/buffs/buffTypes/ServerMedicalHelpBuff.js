@@ -1,10 +1,10 @@
 import * as alt from 'alt-server';
 
-import { BuffBase } from './BuffBase.js'
-//import { BuffRegistry } from '../BuffRegistry.js';
+import { ServerBuffBase } from './ServerBuffBase.js'
+import { BuffIds } from '@shared/SharedConfig.js'
 
-export default class MedicalHelpBuff extends BuffBase {
-    static id = 'medicalHelp';
+export default class MedicalHelpBuff extends ServerBuffBase {
+    static id = BuffIds.MEDICALHELP;
     static allowedEntities = ['Player', 'Ped'];
     static stackable = true;
     static maxStacks = 3;
@@ -38,5 +38,3 @@ export default class MedicalHelpBuff extends BuffBase {
 }
 
 console.log('Файл MedicalHelpBuff импортировался');
-
-//BuffRegistry.register(FearBuff);

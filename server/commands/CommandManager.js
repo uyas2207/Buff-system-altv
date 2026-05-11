@@ -39,7 +39,12 @@ export class CommandManager {
             const id = parseInt(arg[0]);
             const entity = alt.BaseObject.getByID(2, id)
             alt.emitClient(player, 'print_ped_info', entity);
-            
+        });
+    
+        chat.registerCmd('test_ped_2', (player, arg) => { // /get_buffs_all - Получить все существующие баффы (команда для дебага потом можно убрать)
+            const id = parseInt(arg[0]);
+            const entity = alt.BaseObject.getByID(2, id)
+            alt.emitClient(player, 'print_ped_info_2', entity);
         });
         
         alt.on('consoleCommand', (command, ...arg) => {
@@ -53,7 +58,7 @@ export class CommandManager {
                 this.buffTickManager.remove_GlobalBuffTick();
             }
             if (command === 'medicalHelp'){
-                alt.emit('add_buff', null, ['medicalHelp', 'Ped', 1, 2]);
+                alt.emit('add_buff', null, ['medical_help', 'Ped', 1, 2]);
             }
             if(command === 'hp'){
                 const entity = alt.BaseObject.getByID(2, 1);
@@ -72,7 +77,7 @@ export class CommandManager {
                 this.buffManager.printAllExistingMessage();
             }
             if(command === 'test_stackable'){
-                alt.emit('test_stackable', 'medicalHelp');
+                alt.emit('test_stackable', 'medical_help');
             }
         });
     }
