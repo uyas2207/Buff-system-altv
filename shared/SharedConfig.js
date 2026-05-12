@@ -5,3 +5,17 @@ export const BuffIds = {
     INVISIBLE: 'invisible',
     MEDICALHELP: 'medical_help'
 };
+
+export const baseObjectType = {
+    Player: 0,
+    Vehicle: 1,
+    Ped: 2,
+    LocalPlayer: 18
+}
+
+export const BaseObjectFilterType = {
+    Player: 1,
+    Vehicle: 2,
+    Ped: 4,
+    Object: 8
+}

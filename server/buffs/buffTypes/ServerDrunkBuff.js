@@ -1,14 +1,12 @@
 import { ServerBuffBase } from './ServerBuffBase.js'
 import { BuffIds } from '@shared/SharedConfig.js'
-import { baseObjectType } from '../../config/buffsConfig.js'
+import { baseObjectType } from '@shared/SharedConfig.js'
 
 export default class DrunkBuff extends ServerBuffBase {
     static id = BuffIds.DRUNK;
     static allowedEntities = [baseObjectType.Player, baseObjectType.Ped];
     static stackable = true;
     static maxStacks = 3;
-//    static tickInterval = defaultTickInterval;
-//    static buffDuration = defaultBuffDuration;
 
     static onApply(entity, instance) {
         entity.setSyncedMeta(`${this.id}`, instance.stacks);
@@ -22,5 +20,3 @@ export default class DrunkBuff extends ServerBuffBase {
         console.log(log);
     }
 }
-
-console.log('Файл DrunkBuff импортировался');

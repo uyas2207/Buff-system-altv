@@ -1,6 +1,7 @@
 import * as native from 'natives';
 import { ClientBuffBase } from './ClientBuffBase.js';
 import { BuffIds } from '@shared/SharedConfig.js';
+import { baseObjectType } from '@shared/SharedConfig.js'
 
 import { drunkAnimDictionary } from '../../config/AnimationConfig.js' 
 
@@ -27,23 +28,15 @@ export default class ClientDrunkBuff extends ClientBuffBase {
     
     static addDrunkBuffVisuals(entity, value){
         native.setPedMovementClipset(entity, drunkAnimDictionary[value], 1.0);
-        if (entity.type === 18) { // entity.type === 18 это LocalPlayer
+        if (entity.type === baseObjectType.LocalPlayer) {
             native.shakeGameplayCam("DRUNK_SHAKE", value);
         }
     }
 
     static removeDrunkBuffVisuals(entity){
         native.resetPedMovementClipset(entity, 1.0);
-        if (entity.type === 18) { // entity.type === 18 это LocalPlayer
+        if (entity.type === baseObjectType.LocalPlayer) {
             native.shakeGameplayCam(false);
         }
     }
-/*
-    static onMetaRemove(entity) {
-        console.log('[DrunkBuffClient] onMetaRemove:', entity);
-        native.resetPedMovementClipset(entity, 1.0);
-    }
-*/
 }
-
-//native.shakeGameplayCam("DRUNK_SHAKE", intesity);

@@ -2,9 +2,9 @@ export class ClientBuffBase {
     static id = null;
     
     static onMetaChange(entity, value, oldValue) {
-        console.log('empty onMetaChange');
+        console.error('empty onMetaChange');
     }
     static onEntityCreate(entity, value) {
-        console.log('empty onEntityCreate');
+        console.error('empty onEntityCreate');
     }
 }

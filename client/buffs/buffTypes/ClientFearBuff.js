@@ -25,10 +25,4 @@ export default class ClientFearBuff extends ClientBuffBase {
             native.clearPedTasksImmediately(entity);
         }
     }
-/*
-    static onMetaRemove(entity) {
-        native.setEntityVisible(entity, true, true);
-    }
-*/
 }
-//clearPedTasksImmediately

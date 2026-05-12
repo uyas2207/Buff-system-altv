@@ -2,10 +2,9 @@ import * as alt from 'alt-server';
 import * as chat from 'alt:chat';
 
 export class PedManager {
-    constructor(defaultPedParameters, pedStorage, npcs){
+    constructor(defaultPedParameters, npcs){
         this.defaultPedParameters = defaultPedParameters;
         this.npcsDefaultParameters = npcs;
-        this.pedStorage = pedStorage;
     }
     
     spawnDefaultNpcs = () =>{
@@ -16,7 +15,6 @@ export class PedManager {
             ped.health = 1;
             //ped.visible = false;
             //ped.setSyncedMeta('visible', false)
-            //this.pedStorage.addPed(ped);
             //alt.log(ped.getSyncedMeta('visible'));
         });
     }

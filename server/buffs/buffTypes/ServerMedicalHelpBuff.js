@@ -2,7 +2,8 @@ import * as alt from 'alt-server';
 
 import { ServerBuffBase } from './ServerBuffBase.js'
 import { BuffIds } from '@shared/SharedConfig.js'
-import { baseObjectType } from '../../config/buffsConfig.js'
+import { baseObjectType } from '@shared/SharedConfig.js'
+import { BaseObjectFilterType } from '@shared/SharedConfig.js'
 
 export default class MedicalHelpBuff extends ServerBuffBase {
     static id = BuffIds.MEDICALHELP;
@@ -11,10 +12,8 @@ export default class MedicalHelpBuff extends ServerBuffBase {
     static maxStacks = 3;
     
     static playersSearchRange = 10;
-    static allowedGetEntitiesInRangeTypes = [1]; //Player: 1, Vehicle: 2, Ped: 4, Object: 8 (BaseObjectFilterType)
-    
-//    static tickInterval = defaultTickInterval;
-//    static buffDuration = defaultBuffDuration;
+    static allowedGetEntitiesInRangeTypes = [BaseObjectFilterType.Player]; //Player: 1, Vehicle: 2, Ped: 4, Object: 8 (BaseObjectFilterType)
+    static hpPerTick = 5;
 
     static onApply(entity, instance) {
         alt.log(`[medicalHelp] Applied to ${entity.id}, stacks: ${instance.stacks}`);
@@ -26,16 +25,12 @@ export default class MedicalHelpBuff extends ServerBuffBase {
     static onTick(entity, instance) {
         const playersInRange = alt.getEntitiesInRange(entity.pos, this.playersSearchRange, entity.dimension, this.allowedGetEntitiesInRangeTypes).length;
         const currentStacksAmmount = Math.min(this.maxStacks, Math.max(playersInRange, instance.stacks));
-        alt.log('currentStacksAmmount =', currentStacksAmmount);
         if (entity.health < entity.maxHealth) {
-            entity.health = Math.min(entity.maxHealth, entity.health + 5 * currentStacksAmmount);
+            entity.health = Math.min(entity.maxHealth, entity.health + this.hpPerTick * currentStacksAmmount);
         }
-        alt.log('entity.health', entity.health);
     }
 
     static onRemove(entity, instance) {
         alt.log(`[medicalHelp] Removed from entity.type:${entity.type}, entity.id:${entity.id}`);
     }
 }
-
-console.log('Файл MedicalHelpBuff импортировался');

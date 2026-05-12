@@ -1,14 +1,12 @@
 import { ServerBuffBase } from './ServerBuffBase.js'
 import { BuffIds } from '@shared/SharedConfig.js'
-import { baseObjectType } from '../../config/buffsConfig.js'
+import { baseObjectType } from '@shared/SharedConfig.js'
 
 export default class FearBuff extends ServerBuffBase {
     static id = BuffIds.FEAR;
     static allowedEntities = [baseObjectType.Ped];
     static stackable = false;
     static maxStacks = 1;
-//    static tickInterval = defaultTickInterval;
-//    static buffDuration = defaultBuffDuration;
 
     static onApply(entity, instance) {
         entity.setSyncedMeta(`${this.id}`, [true, instance.source]);
@@ -21,5 +19,3 @@ export default class FearBuff extends ServerBuffBase {
     }
         
 }
-
-console.log('Файл FearBuff импортировался');

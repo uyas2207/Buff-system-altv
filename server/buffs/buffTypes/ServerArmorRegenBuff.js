@@ -1,6 +1,6 @@
 import { ServerBuffBase } from './ServerBuffBase.js'
 import { BuffIds } from '@shared/SharedConfig.js'
-import { baseObjectType } from '../../config/buffsConfig.js'
+import { baseObjectType } from '@shared/SharedConfig.js'
 
 export default class ArmorRegenBuff extends ServerBuffBase {
     static id = BuffIds.ARMOR_REGEN;
@@ -9,8 +9,6 @@ export default class ArmorRegenBuff extends ServerBuffBase {
     static maxStacks = 3;
     static maxArmour = 150;
     static defaultRegeneration = 5;
-//    static tickInterval = defaultTickInterval;
-//    static buffDuration = defaultBuffDuration;
 
     static onApply(entity, instance) {
         console.log(`[ArmorRegenBuff] Applied to ${entity.id}, stacks: ${instance.stacks}`);
@@ -28,5 +26,3 @@ export default class ArmorRegenBuff extends ServerBuffBase {
         console.log(`[ArmorRegenBuff] Removed from entity.type:${entity.type}, entity.id:${entity.id}`);
     }
 }
-
-console.log('Файл ArmorRegenBuff импортировался');

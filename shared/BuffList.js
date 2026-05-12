@@ -7,11 +7,9 @@ export default class BuffList {
     }
     
     register(buffClass) {
-        //console.log('Происходит регистрация бафа', buffClass.id);
         if (this.#buffListServer.has(buffClass.id)) {
             throw new Error(`Buff ${buffClass.id} already registered`);
         }
-        console.log('typeof buffClass', typeof buffClass);
         this.#buffListServer.set(buffClass.id, buffClass);
     }
 
@@ -30,9 +28,7 @@ export default class BuffList {
     async registerAllBuffTypes(files){
         await Promise.all(
             files.map(async file => {
-                //console.log('Происходит импорт файла:',file);
                 const buffClass = await import(`@BuffTypes/${file}`);
-                //console.log('buffClass для регистрации', buffClass);
                 this.register(buffClass.default);
             })
         );

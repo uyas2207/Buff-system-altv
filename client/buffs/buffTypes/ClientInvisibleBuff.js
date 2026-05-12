@@ -12,10 +12,4 @@ export default class ClientInvisibleBuff extends ClientBuffBase {
     static onMetaChange(entity, value, oldValue) {
         native.setEntityVisible(entity, !value, !value);
     }
-/*
-    static onMetaRemove(entity) {
-        native.setEntityVisible(entity, true, true);
-    }
-*/
 }
-console.log('Произошел импорт InvisibleBuffClient');
