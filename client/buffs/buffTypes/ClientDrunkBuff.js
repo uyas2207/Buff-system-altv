@@ -1,10 +1,11 @@
 import * as native from 'natives';
 import { ClientBuffBase } from './ClientBuffBase.js';
+import { BuffIds } from '@shared/SharedConfig.js';
 
 import { drunkAnimDictionary } from '../../config/AnimationConfig.js' 
 
 export default class ClientDrunkBuff extends ClientBuffBase {
-    static id = 'drunk';
+    static id = BuffIds.DRUNK;
 
     static onEntityCreate(entity, value) {
         console.log('[DrunkBuffClient] onEntityCreate:', entity, value);

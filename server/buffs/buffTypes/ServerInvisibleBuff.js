@@ -1,9 +1,10 @@
 import { ServerBuffBase } from './ServerBuffBase.js'
 import { BuffIds } from '@shared/SharedConfig.js'
+import { baseObjectType } from '../../config/buffsConfig.js'
 
 export default class InvisibleBuff extends ServerBuffBase {
     static id = BuffIds.INVISIBLE;
-    static allowedEntities = ['Player', 'Ped'];
+    static allowedEntities = [baseObjectType.Player, baseObjectType.Ped];
     static stackable = false;
     static maxStacks = 1;
 //    static tickInterval = defaultTickInterval;

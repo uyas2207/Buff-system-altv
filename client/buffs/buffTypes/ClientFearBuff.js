@@ -1,8 +1,9 @@
 import * as native from 'natives';
 import { ClientBuffBase } from './ClientBuffBase.js';
+import { BuffIds } from '@shared/SharedConfig.js';
 
 export default class ClientFearBuff extends ClientBuffBase {
-    static id = 'fear';
+    static id = BuffIds.FEAR;
 
     static onEntityCreate(entity, valueAndSource) {
         const value = valueAndSource[0];

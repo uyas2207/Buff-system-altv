@@ -7,7 +7,3 @@ export const baseObjectType = {
     Vehicle: 1,
     Ped: 2
 }
-
-/* export const BuffIds = {
-    ARMOR_REGEN: 'armor_regen',
-}; */

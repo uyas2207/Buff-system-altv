@@ -1,8 +1,9 @@
 import * as native from 'natives';
 import { ClientBuffBase } from './ClientBuffBase.js';
+import { BuffIds } from '@shared/SharedConfig.js';
 
 export default class ClientInvisibleBuff extends ClientBuffBase {
-    static id = 'invisible';
+    static id = BuffIds.INVISIBLE;
 
     static onEntityCreate(entity, value) {
         native.setEntityVisible(entity, !value, !value);

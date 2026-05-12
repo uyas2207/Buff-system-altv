@@ -11,7 +11,7 @@ export default class BuffList {
         if (this.#buffListServer.has(buffClass.id)) {
             throw new Error(`Buff ${buffClass.id} already registered`);
         }
-
+        console.log('typeof buffClass', typeof buffClass);
         this.#buffListServer.set(buffClass.id, buffClass);
     }
 

@@ -7,9 +7,4 @@ export class ClientBuffBase {
     static onEntityCreate(entity, value) {
         console.log('empty onEntityCreate');
     }
-    /*
-    static onMetaRemove(entity) {
-        console.log('empty onMetaRemove');
-    }
-    */
 }

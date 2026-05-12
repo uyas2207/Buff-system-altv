@@ -68,13 +68,12 @@ export class BuffManager {
         //проверка коректности полученных данных, если данные некорректные код дальше не идет
         
         //проверяет существует ли баф с таким названием в конфиге, если нет останваливает выполнение кода
-        this.#validate_BuffName(buffName);  
+        this.#validate_BuffName(buffName);
+        const buff = this.serverBuffList.get(buffName);
         //переводит Player, Vehicle, Ped в BaseObjectType.id (при необходимости) и проверяет сущетсует ли такой BaseObjectType.id в конифиге, если нет останваливает выполнение кода
-        targetType = this.#validate_TargetType(targetType);
+        targetType = this.#validate_TargetType(targetType, buff.allowedEntities);
         //проверяет существует ли BaseObjectType с таким id на сервере, если да возвращает этот entity, если нет останваливает выполнение кода
         const entity = this.#validate_TargetId(targetType, targetId);
-
-        const buff = this.serverBuffList.get(buffName);
 
         //проверяет можно ли стакать баф, если нет то стак будет = 1
         if (buff.stackable === true){
@@ -113,15 +112,15 @@ export class BuffManager {
        }
     }
     //переводит Player, Vehicle, Ped в BaseObjectType.id (при необходимости) и проверяет сущетсует ли такой BaseObjectType.id в конифиге, если нет останваливает выполнение кода
-    #validate_TargetType(targetType){
+    #validate_TargetType(targetType, allowedEntities){
         //если targetType записан как название из baseObjectType переводит его в числовое знаенчие по данным из конфига
         if (typeof targetType === "string"){
             targetType = this.baseObjectType[targetType];
         }
-        //проверяет существует ли такой тип entity в конфиге если нет выдает ошибку и код дальше не идет 
-        if(!(Object.values(this.baseObjectType).includes(targetType))){
-            throw new Error(` targetType ${targetType} не существует в baseObjectType`);
+        if (!allowedEntities.includes(targetType)){
+            throw new Error(`baseObjectType ${targetType} не входит в список разрешенных типов entities`);
         }
+
         //если такой entity существует то возвращает его уже в числовом формате (если он был текстовым)
         return targetType;
     }
