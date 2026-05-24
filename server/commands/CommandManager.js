@@ -7,6 +7,7 @@ export class CommandManager {
         this.buffTickManager = buffTickManager;
         this.serverBuffList = serverBuffList;
         this.buffManager = buffManager;
+        this.vehEntity = null;
     }
     
     registerCommands() {
@@ -78,6 +79,66 @@ export class CommandManager {
             }
             if(command === 'test_stackable'){
                 alt.emit('test_stackable', 'medical_help');
+            }
+
+            if(command === 'addTestMeta'){
+                const entity = alt.BaseObject.getByID(1, 1);
+                entity.setSyncedMeta(`asd`, true);
+                alt.log('entity добавлена setSyncedMeta');
+            }
+            if(command === 'dellTestMeta'){
+                const entity = alt.BaseObject.getByID(1, 1);
+                entity.deleteSyncedMeta(`asd`);
+                alt.log('entity удалена deleteSyncedMeta');
+            }
+            if(command === 'getTestMeta'){
+                const entity = alt.BaseObject.getByID(1, 1);
+                const allSyncedKeys = entity.getSyncedMeta('asd');
+                console.log('Все SyncedMeta ключи:', allSyncedKeys);
+/*                 const result = entity.getSyncedMeta(`asd`);
+                alt.log('entity.getSyncedMeta(`asd`) RESULT', result ); */
+            }
+
+            if(command === 'engineOn'){
+                this.vehEntity.engineOn = true;
+            }
+            if(command === 'engineOff'){
+                this.vehEntity.engineOn = false;
+            }
+            if(command === 'manualEngineControltrue'){
+                this.vehEntity.manualEngineControl = true;
+            }
+            if(command === 'manualEngineControlfalse'){
+                this.vehEntity.manualEngineControl = false;
+            }
+            if(command === 'frozentrue'){
+                this.vehEntity.frozen = true;
+            }
+            if(command === 'frozenfalse'){
+                this.vehEntity.frozen = false;
+            }
+            if(command === 'setNetOwnernull'){
+                this.vehEntity.setNetOwner();
+            }
+            if(command === 'resetNetOwner'){
+                this.vehEntity.resetNetOwner();
+            }
+            if(command === 'netowner'){
+                console.log('netowner =', this.vehEntity.netowner);
+            }
+            if(command === 'vehEntityset'){
+                this.vehEntity = alt.BaseObject.getByID(1, 1);
+            }
+            if(command === 'vehinfo'){
+                    for (let key in this.vehEntity) {
+                    try {
+                        if(key !== 'roofState'){
+                        alt.log(`${key} = ${this.vehEntity[key]}`);
+                        }
+                    } catch (error) {
+                        
+                    }
+                }
             }
         });
     }

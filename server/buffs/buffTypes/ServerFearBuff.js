@@ -9,12 +9,12 @@ export default class FearBuff extends ServerBuffBase {
     static maxStacks = 1;
 
     static onApply(entity, instance) {
-        entity.setSyncedMeta(`${this.id}`, [true, instance.source]);
+        entity.setSyncedMeta(`${this.id}`, instance.source);
         console.log(`[FearBuff] Applied to ${entity.id}, stacks: ${instance.stacks}`);
     }
 
     static onRemove(entity, instance) {
-        entity.setSyncedMeta(`${this.id}`, false);
+        entity.deleteSyncedMeta(`${this.id}`);
         console.log(`[FearBuff] Removed from entity.type:${entity.type}, entity.id:${entity.id}`);
     }
         

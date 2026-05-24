@@ -12,7 +12,7 @@ export class ClientBuffManager {
         });
 
         alt.on('syncedMetaChange', (entity, metaKey, value, oldValue) => {
-            if (entity.streamed === false) return;
+            if (entity.scriptID === 0) return;
             this.#handleSyncedMetaChange(entity, metaKey, value, oldValue);
         });
     }
@@ -20,6 +20,7 @@ export class ClientBuffManager {
     #handleEntityCreate(entity){
         this.clientBuffList.forEachBuff((handler, metaKey) => {
             if (!entity.hasSyncedMeta(metaKey)) return;
+
             const value = entity.getSyncedMeta(metaKey);
             if (value === undefined) return;
 
@@ -30,8 +31,11 @@ export class ClientBuffManager {
     #handleSyncedMetaChange(entity, metaKey, value, oldValue){
         const handler = this.clientBuffList.get(metaKey);
         if (!handler) return;
-        
-        handler.onMetaChange(entity, value, oldValue);
+        if(oldValue !== undefined && value === undefined){
+            handler.onMetaDelete(entity, value, oldValue);
+        }
+        else {
+            handler.onMetaChange(entity, value, oldValue);
+        }
     }
-
 }

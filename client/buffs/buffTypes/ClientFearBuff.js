@@ -5,24 +5,24 @@ import { BuffIds } from '@shared/SharedConfig.js';
 export default class ClientFearBuff extends ClientBuffBase {
     static id = BuffIds.FEAR;
 
-    static onEntityCreate(entity, valueAndSource) {
-        const value = valueAndSource[0];
-        const source = valueAndSource[1];
-        this.#handleFearToggle(entity, value, source);
+    static onEntityCreate(entity, source) {
+        native.taskReactAndFleePed(entity.scriptID, source);
     }
 
-    static onMetaChange(entity, valueAndSource, oldValue) {
-        const value = valueAndSource[0];
-        const source = valueAndSource[1];
-        this.#handleFearToggle(entity, value, source);
+    static onMetaChange(entity, source, oldValue) {
+        native.taskReactAndFleePed(entity.scriptID, source);
     }
 
-    static #handleFearToggle(entity, value, source){
+    static onMetaDelete(entity, value, oldValue) {
+        native.clearPedTasksImmediately(entity.scriptID);
+    }
+
+/*     static #handleFearToggle(entity, value, source){
         if(value === true){
-            native.taskReactAndFleePed(entity, source);
+            native.taskReactAndFleePed(entity.scriptID, source);
         }
         else{
-            native.clearPedTasksImmediately(entity);
+            native.clearPedTasksImmediately(entity.scriptID);
         }
-    }
+    } */
 }

@@ -8,7 +8,7 @@ export default class ArmorRegenBuff extends ServerBuffBase {
     static stackable = true;
     static maxStacks = 3;
     static maxArmour = 150;
-    static defaultRegeneration = 5;
+    static armourPerTick = 5;
 
     static onApply(entity, instance) {
         console.log(`[ArmorRegenBuff] Applied to ${entity.id}, stacks: ${instance.stacks}`);
@@ -17,7 +17,7 @@ export default class ArmorRegenBuff extends ServerBuffBase {
 
     static onTick(entity, instance) {
         if (entity.armour < this.maxArmour) {
-            entity.armour = Math.min(this.maxArmour, entity.armour + instance.stacks * this.defaultRegeneration);
+            entity.armour = Math.min(this.maxArmour, entity.armour + instance.stacks * this.armourPerTick);
         }
         console.log('entity.armour', entity.armour);
     }

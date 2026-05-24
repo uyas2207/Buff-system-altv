@@ -14,9 +14,10 @@ export default class DrunkBuff extends ServerBuffBase {
     }
 
     static onRemove(entity, instance) {
-        entity.setSyncedMeta(`${this.id}`, false);
+        entity.deleteSyncedMeta(`${this.id}`);
+/*         entity.setSyncedMeta(`${this.id}`, false);
         console.log(`[DrunkBuff] Removed from entity.type:${entity.type}, entity.id:${entity.id}`);
         const log = entity.getSyncedMeta(`${this.id}`);
-        console.log(log);
+        console.log(log); */
     }
 }

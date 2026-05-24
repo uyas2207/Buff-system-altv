@@ -30,6 +30,7 @@ class BuffServer {
     #init(){
         alt.on('playerConnect', (player) => {
             player.spawn(-1269.91, -1438.64, 4.46);
+            //player.spawn(439.1604, -982.1671, 30.6783);
             this.serverBuffList.sendClientBuffList(player);
         });
 
@@ -37,13 +38,25 @@ class BuffServer {
             this.commandManager.registerCommands();
             this.serverBuffList.processAllbuffsFiles('./resources/buff-system/server/buffs/buffTypes', './resources/buff-system/client/buffs/buffTypes');
             this.createDemonstrationScene();
+        
+        });
+
+        alt.on('OnPlayerEnterVehicle', (player, vehicle, state) => {
+            console.log('AAAAAAAAAA OnPlayerEnterVehicle');
+        });
+        alt.on('playerEnterVehicle', (player, vehicle, state) => {
+            console.log('playerEnterVehicle AAAAAAAAAA');
+        });
+        alt.on('onPlayerEnterVehicle', (player, vehicle, state) => {
+            console.log('AAAAAAAAAA onPlayerEnterVehicle AAAAAAAAAA');
         });
     }
 
     createDemonstrationScene(){
         this.pedManager.spawnDefaultNpcs();
         // можно в будущем добавить vehicleManager
-        //new alt.Vehicle('benson', -1275.78, -1434.56, 4.54, 0, 0, 0.56621);
+        const veh = new alt.Vehicle('adder', -1275.78, -1434.56, 4.54, 0, 0, 0.56621);
+        veh.manualEngineControl = true;
     }
 }
 

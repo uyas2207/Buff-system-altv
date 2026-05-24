@@ -1,5 +1,4 @@
 export default class BuffList {
-    //ServerBuffList
     #buffListServer;
 
     constructor(){
@@ -37,7 +36,7 @@ export default class BuffList {
     // перебор всех бафов с колбэком
     forEachBuff(callback) {
         this.#buffListServer.forEach((value, key) => {
-            callback(value);
+            callback(value, key);
         });
     }
 }

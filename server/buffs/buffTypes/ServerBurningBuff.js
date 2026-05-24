@@ -2,9 +2,9 @@ import { ServerBuffBase } from './ServerBuffBase.js'
 import { BuffIds } from '@shared/SharedConfig.js'
 import { baseObjectType } from '@shared/SharedConfig.js'
 
-export default class InvisibleBuff extends ServerBuffBase {
-    static id = BuffIds.INVISIBLE;
-    static allowedEntities = [baseObjectType.Player, baseObjectType.Ped];
+export default class BurningBuff extends ServerBuffBase {
+    static id = BuffIds.BURNING;
+    static allowedEntities = [baseObjectType.Player, baseObjectType.Ped, baseObjectType.Vehicle];
     static stackable = false;
     static maxStacks = 1;
 
