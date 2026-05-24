@@ -2,143 +2,26 @@ import * as alt from 'alt-server';
 import * as chat from 'alt:chat';
 
 export class CommandManager {
-    //не забыть убрать constructor и buffTickManager
-    constructor(buffTickManager, serverBuffList, buffManager){
+    constructor(buffTickManager, buffManager){
         this.buffTickManager = buffTickManager;
-        this.serverBuffList = serverBuffList;
         this.buffManager = buffManager;
-        this.vehEntity = null;
     }
     
     registerCommands() {
-        chat.registerCmd('add_buff', (player, arg) => { // /add_buff [buffName],[targetType],[targetId]
-            alt.emit('add_buff', player, arg);
-        });
-        chat.registerCmd('remove_buff', (player, arg) => { // /remove_buff [targetId],[buff] - Удалить бафф у игрока
-            alt.emit('remove_buff', player, arg);
-        });
-        chat.registerCmd('remove_buff_all', (player, arg) => { // /remove_buff_all [buff] - Удалить бафф у всех игроков
-            alt.emit('remove_buff_all', player, arg);
-        });
-        chat.registerCmd('get_buffs', (player, arg) => { // /get_buffs [targetStaticId] - Получить баффы игрока
-            alt.emit('get_buffs', player, arg);
-        });
-        chat.registerCmd('get_buffs_all', () => { // /get_buffs_all - Получить все существующие баффы (команда для дебага потом можно убрать)
-            alt.emit('get_buffs_all');
-        });
-
-        //дебаг команды, потом удалить
-        chat.registerCmd('info', (player, arg) => { // /get_buffs_all - Получить все существующие баффы (команда для дебага потом можно убрать)
-            alt.log('arg[0]', arg[0]);
-            alt.log('arg[1]', arg[1]);
-            alt.log('arg[2]', arg[2]);
-            alt.log('arg[3]', arg[3]);
-            alt.log('arg[4]', arg[4]);
-        });
-
-        chat.registerCmd('test_ped', (player, arg) => { // /get_buffs_all - Получить все существующие баффы (команда для дебага потом можно убрать)
-            const id = parseInt(arg[0]);
-            const entity = alt.BaseObject.getByID(2, id)
-            alt.emitClient(player, 'print_ped_info', entity);
-        });
-    
-        chat.registerCmd('test_ped_2', (player, arg) => { // /get_buffs_all - Получить все существующие баффы (команда для дебага потом можно убрать)
-            const id = parseInt(arg[0]);
-            const entity = alt.BaseObject.getByID(2, id)
-            alt.emitClient(player, 'print_ped_info_2', entity);
+        chat.registerCmd('applyBuff', (player, args) => { // /applyBuff [buffName],[targetType],[targetId],[source],[stacks]
+            try {
+                this.buffManager.applyBuff(player, ...args);
+            } catch (error) {
+                alt.logError('Ошибка при добавлении баффа:', error.message);
+            }
         });
         
-        alt.on('consoleCommand', (command, ...arg) => {
-            if (command === 'get_buffs_all'){
-                alt.emit('get_buffs_all');
-            }
+        alt.on('consoleCommand', (command, args) => {
             if (command === 'tick'){
-                this.buffTickManager.create_GlobalBuffTick();
+                this.buffTickManager.createGlobalBuffTick();
             }
             if (command === 'untick'){
-                this.buffTickManager.remove_GlobalBuffTick();
-            }
-            if (command === 'medicalHelp'){
-                alt.emit('add_buff', null, ['medical_help', 'Ped', 1, 2]);
-            }
-            if(command === 'hp'){
-                const entity = alt.BaseObject.getByID(2, 1);
-                entity.health = 1;
-            }
-            if(command === 'changeStacksAmmount'){
-                const entity = alt.BaseObject.getByID(2, 1);
-                const stacks = parseInt(arg[0]);
-                alt.log('arg', stacks);
-                alt.emit('changeStacksAmmount', entity, 'medicalHelp', stacks);
-            }
-            if(command === 'bufflist'){
-                this.serverBuffList.getAll();
-            }
-            if(command === 'printAllExistingMessage'){
-                this.buffManager.printAllExistingMessage();
-            }
-            if(command === 'test_stackable'){
-                alt.emit('test_stackable', 'medical_help');
-            }
-
-            if(command === 'addTestMeta'){
-                const entity = alt.BaseObject.getByID(1, 1);
-                entity.setSyncedMeta(`asd`, true);
-                alt.log('entity добавлена setSyncedMeta');
-            }
-            if(command === 'dellTestMeta'){
-                const entity = alt.BaseObject.getByID(1, 1);
-                entity.deleteSyncedMeta(`asd`);
-                alt.log('entity удалена deleteSyncedMeta');
-            }
-            if(command === 'getTestMeta'){
-                const entity = alt.BaseObject.getByID(1, 1);
-                const allSyncedKeys = entity.getSyncedMeta('asd');
-                console.log('Все SyncedMeta ключи:', allSyncedKeys);
-/*                 const result = entity.getSyncedMeta(`asd`);
-                alt.log('entity.getSyncedMeta(`asd`) RESULT', result ); */
-            }
-
-            if(command === 'engineOn'){
-                this.vehEntity.engineOn = true;
-            }
-            if(command === 'engineOff'){
-                this.vehEntity.engineOn = false;
-            }
-            if(command === 'manualEngineControltrue'){
-                this.vehEntity.manualEngineControl = true;
-            }
-            if(command === 'manualEngineControlfalse'){
-                this.vehEntity.manualEngineControl = false;
-            }
-            if(command === 'frozentrue'){
-                this.vehEntity.frozen = true;
-            }
-            if(command === 'frozenfalse'){
-                this.vehEntity.frozen = false;
-            }
-            if(command === 'setNetOwnernull'){
-                this.vehEntity.setNetOwner();
-            }
-            if(command === 'resetNetOwner'){
-                this.vehEntity.resetNetOwner();
-            }
-            if(command === 'netowner'){
-                console.log('netowner =', this.vehEntity.netowner);
-            }
-            if(command === 'vehEntityset'){
-                this.vehEntity = alt.BaseObject.getByID(1, 1);
-            }
-            if(command === 'vehinfo'){
-                    for (let key in this.vehEntity) {
-                    try {
-                        if(key !== 'roofState'){
-                        alt.log(`${key} = ${this.vehEntity[key]}`);
-                        }
-                    } catch (error) {
-                        
-                    }
-                }
+                this.buffTickManager.removeGlobalBuffTick();
             }
         });
     }

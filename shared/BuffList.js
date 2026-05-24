@@ -23,7 +23,7 @@ export default class BuffList {
     getAll() {
         return this.#buffListServer;
     }
-
+    //импортирует все файлы с названиями переданными в массиве files (все файлы должны находится в одной папке)
     async registerAllBuffTypes(files){
         await Promise.all(
             files.map(async file => {

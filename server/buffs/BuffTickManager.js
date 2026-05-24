@@ -4,6 +4,7 @@ export class BuffTickManager {
     #globalBuffTick;
     
     static #SYSTEM_TICK_MS = 500;   //стандартное значение времени с каким промежутком выполняется тик бафов
+    static #TICK_TOLERANCE_MS = 100; //стандартное значение погрешнисти между тиками
 
     constructor(activeBuffsStorage, buffManager, serverBuffList) {
         this.activeBuffsStorage = activeBuffsStorage;
@@ -11,23 +12,30 @@ export class BuffTickManager {
         this.serverBuffList = serverBuffList;
         this.#globalBuffTick = null;
 
-        //this.create_GlobalBuffTick();
+        this.createGlobalBuffTick();
     }
 
-    create_GlobalBuffTick() {
+    createGlobalBuffTick() {
+        if(this.#globalBuffTick !== null){
+            alt.logError('Попытка задублировать globalBuffTick');
+            return;
+        }
         this.#globalBuffTick = alt.setInterval(() =>{
-            this.tick();
+            this.#tick();
         }, BuffTickManager.#SYSTEM_TICK_MS);
     }
 
-    remove_GlobalBuffTick() {
+    removeGlobalBuffTick() {
+        if(this.#globalBuffTick === null){
+            alt.logError('Попытка удалить несуществующий globalBuffTick');
+            return;
+        }
         alt.clearInterval(this.#globalBuffTick);
         this.#globalBuffTick = null;
     }
     
-    tick() {
+    #tick() {
         const now = Date.now();
-        const TICK_TOLERANCE_MS = 100;
         const toRemove = [];
 
         this.activeBuffsStorage.forEachBuff((entity, buffName, instance) => {
@@ -36,26 +44,21 @@ export class BuffTickManager {
                 return;
             }
 
-            if (now >= instance.expiresAt + TICK_TOLERANCE_MS) {
+            if (now >= instance.expiresAt + BuffTickManager.#TICK_TOLERANCE_MS) {
                 toRemove.push({ entity, buffName });
                 return;
             }
 
             const buffInfo = this.serverBuffList.get(buffName);
             
-            if (now + TICK_TOLERANCE_MS - instance.lastTickAt >= instance.tickInterval) {                
+            if (now + BuffTickManager.#TICK_TOLERANCE_MS - instance.lastTickAt >= instance.tickInterval) {                
                 buffInfo.onTick?.(entity, instance);
                 instance.lastTickAt = now;
             }
-            
         });
 
         toRemove.forEach(({ entity, buffName }) => {
             this.buffManager.removeBuff(entity, buffName);
         });
     }        
-    //alt.log('now', new Date(now).toLocaleString());
-    //alt.log('instance.lastTickAt', new Date(instance.lastTickAt).toLocaleString());
-    //alt.log('instance.tickInterval', new Date(instance.tickInterval).toLocaleString());
-    //alt.log('instance.expiresAt', new Date(instance.expiresAt).toLocaleString());
 }

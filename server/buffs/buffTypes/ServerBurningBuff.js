@@ -1,20 +1,12 @@
+import * as alt from 'alt-server';
+
 import { ServerBuffBase } from './ServerBuffBase.js'
 import { BuffIds } from '@shared/SharedConfig.js'
-import { baseObjectType } from '@shared/SharedConfig.js'
 
 export default class BurningBuff extends ServerBuffBase {
     static id = BuffIds.BURNING;
-    static allowedEntities = [baseObjectType.Player, baseObjectType.Ped, baseObjectType.Vehicle];
+    static allowedEntities = [alt.BaseObjectType.Player, alt.BaseObjectType.Ped, alt.BaseObjectType.Vehicle];
     static stackable = false;
     static maxStacks = 1;
-
-    static onApply(entity, instance) {
-        entity.setSyncedMeta(`${this.id}`, true);
-        console.log(`[InvisibleBuff] Applied to ${entity.id}, stacks: ${instance.stacks}`);
-    }
-
-    static onRemove(entity, instance) {
-        entity.deleteSyncedMeta(`${this.id}`);
-        console.log(`[InvisibleBuff] Removed from entity.type:${entity.type}, entity.id:${entity.id}`);
-    }
+    //методы onApply и onRemove у этого бафа стандартные (просто добавляет и удаляет SyncedMeta) и берутся из ServerBuffBase
 }

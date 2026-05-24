@@ -6,17 +6,14 @@ export default class ClientInvisibleBuff extends ClientBuffBase {
     static id = BuffIds.INVISIBLE;
 
     static onEntityCreate(entity, value) {
-        console.log('onEntityCreate');
         native.setEntityVisible(entity.scriptID, !value, 0);
     }
 
-    static onMetaChange(entity, value, oldValue) {
-        console.log('onMetaChange');
+    static onMetaChange(entity, value) {
         native.setEntityVisible(entity.scriptID, !value, 0);
     }
 
-    static onMetaDelete(entity, value, oldValue) {
-        console.log('onMetaDelete');
+    static onMetaDelete(entity) {
         native.setEntityVisible(entity.scriptID, true, 0);
     }
 }

@@ -1,21 +1,19 @@
-import { defaultTickInterval } from '../../config/buffsConfig.js'
-import { defaultbuffDuration } from '../../config/buffsConfig.js'
+import { DEFAULT_TICK_INTERVAL } from '../../config/buffsConfig.js'
+import { DEFAULT_BUFF_DURATION } from '../../config/buffsConfig.js'
 
 export class ServerBuffBase {
     static id = 'defaultBuffName';
     static allowedEntities = [];
     static stackable = false;
     static maxStacks = 1;
-    static tickInterval = defaultTickInterval;
-    static buffDuration = defaultbuffDuration;
+    static tickInterval = DEFAULT_TICK_INTERVAL;
+    static buffDuration = DEFAULT_BUFF_DURATION;
 
-    static onApply(entity, instance) {
+    static onApply(entity) {
         entity.setSyncedMeta(`${this.id}`, true);
-        console.log(`[Buff ${this.id}] empty onApply`);
     }
 
-    static onRemove(entity, instance) {
+    static onRemove(entity) {
         entity.deleteSyncedMeta(`${this.id}`);
-        console.log(`[Buff ${this.id}] empty onRemove`);
     }
 }

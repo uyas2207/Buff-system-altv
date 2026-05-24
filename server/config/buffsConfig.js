@@ -1,3 +1,3 @@
-//не забыть изменить на 10 секунд
-export const defaultTickInterval = 1000;    //время в ms
-export const defaultbuffDuration = 2000;    // 60 000 ms = 1 min
+//время в ms
+export const DEFAULT_TICK_INTERVAL = 10000;
+export const DEFAULT_BUFF_DURATION = 20000;

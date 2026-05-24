@@ -2,21 +2,18 @@ import * as alt from 'alt-server';
 
 import { ServerBuffBase } from './ServerBuffBase.js'
 import { BuffIds } from '@shared/SharedConfig.js'
-import { baseObjectType } from '@shared/SharedConfig.js'
-import { BaseObjectFilterType } from '@shared/SharedConfig.js'
 
 export default class MedicalHelpBuff extends ServerBuffBase {
     static id = BuffIds.MEDICALHELP;
-    static allowedEntities = [baseObjectType.Player, baseObjectType.Ped];
+    static allowedEntities = [alt.BaseObjectType.Player];
     static stackable = true;
     static maxStacks = 3;
     
     static playersSearchRange = 10;
-    static allowedGetEntitiesInRangeTypes = [BaseObjectFilterType.Player]; //Player: 1, Vehicle: 2, Ped: 4, Object: 8 (BaseObjectFilterType)
+    static allowedGetEntitiesInRangeTypes = [alt.BaseObjectFilterType.Player]; //Player: 1, Vehicle: 2, Ped: 4, Object: 8 (BaseObjectFilterType)
     static hpPerTick = 5;
 
     static onApply(entity, instance) {
-        alt.log(`[medicalHelp] Applied to ${entity.id}, stacks: ${instance.stacks}`);
         this.onTick(entity, instance);
     }
 
@@ -30,7 +27,7 @@ export default class MedicalHelpBuff extends ServerBuffBase {
         }
     }
 
-    static onRemove(entity, instance) {
-        alt.log(`[medicalHelp] Removed from entity.type:${entity.type}, entity.id:${entity.id}`);
+    static onRemove() {
+        return;
     }
 }

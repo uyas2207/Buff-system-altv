@@ -1,22 +1,21 @@
+import * as alt from 'alt-server';
+
 import { ServerBuffBase } from './ServerBuffBase.js'
 import { BuffIds } from '@shared/SharedConfig.js'
-import { baseObjectType } from '@shared/SharedConfig.js'
 
 export default class EmpBuff extends ServerBuffBase {
     static id = BuffIds.EMP;
-    static allowedEntities = [baseObjectType.Vehicle];
+    static allowedEntities = [alt.BaseObjectType.Vehicle];
     static stackable = false;
     static maxStacks = 1;
-
-    static onApply(entity, instance) {
+//так как у двигателя хп = 0 игрок не сможет завести двигатель автомобиля
+    static onApply(entity) {
         entity.engineHealth = 0;
         entity.engineOn = false;
-        console.log(`[EmpBuff] Applied to ${entity.id}, stacks: ${instance.stacks}`);
     }
 
-    static onRemove(entity, instance) {
+    static onRemove(entity) {
         entity.engineHealth = 1000;
         entity.engineOn = true;
-        console.log(`[EmpBuff] Removed from entity.type:${entity.type}, entity.id:${entity.id}`);
     }
 }

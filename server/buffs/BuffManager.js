@@ -1,56 +1,13 @@
 import * as alt from 'alt-server';
 
 export class BuffManager {
-    constructor(activeBuffsStorage, serverBuffList, baseObjectType) {
-        this.activeBuffsStorage = activeBuffsStorage;
-        this.serverBuffList = serverBuffList;       //данные из конфига о существующих бафах и их характеристиках
-        this.baseObjectType = baseObjectType;   //данные из конфига о BaseObjectType.id соответвующие Player, Vehicle, Ped
-
-        this.#registerEventListeners();
-    }
-    
-    #registerEventListeners(){
-        alt.on('add_buff', (player, arg) => {
-            try {
-                this.add_buff(player, arg);
-            } catch (error) {
-                alt.logError('Ошибка при добавлении баффа:', error.message);
-            }
-        });
-        alt.on('remove_buff', (player, arg) => {
-            
-        });
-        alt.on('remove_buff_all', (player, arg) => {
-            
-        });
-        alt.on('get_buffs', (player, arg) => {
-            
-        });
-        //метод для дебага (потом можно убрать)
-        alt.on('get_buffs_all', () => {
-            this.activeBuffsStorage.printAllActiveBuffs();
-        });
-
-        alt.on('test_stackable', (buffName) => {
-            //this.testStacks(buffName);
-            const buffClass = this.serverBuffList.get(buffName);
-            //buffClass.onApply();
- 
-            console.log('buffClass.stackable', buffClass.stackable);
-            console.log('buffClass.id', buffClass.id);
-            console.log('buffClass.buffDuration', buffClass.buffDuration);
-            console.log('buffClass.tickInterval', buffClass.tickInterval);
-            console.log('buffClass.maxStacks', buffClass.maxStacks);
- 
-        });
-    }
-
-    testStacks(buffName){
-        this.serverBuffList.testStackable(buffName);
+    constructor(activeBuffsStorage, serverBuffList) {
+        this.activeBuffsStorage = activeBuffsStorage;   //класс хранилище активных бафов
+        this.serverBuffList = serverBuffList;       //данные о существующих бафах и их характеристиках
     }
 
     //выводит сообщение со списком всех бафов из ServerBuffList
-    printAllExistingMessage(){
+    printAllBuffs(){
         alt.log('Существующие бафы:');
         this.serverBuffList.forEachBuff((buffClass) => {
             alt.log(`${buffClass.id}`);
@@ -58,82 +15,94 @@ export class BuffManager {
     }
 
     //основной метод класса, проверяет коретность данных и если все правильно записывает баф в класс ActiveBuffsStorage
-    add_buff(player, args) {
-        const buffName = String(args[0]);    //medicalHelp, drunk, armor_regen, fear, invisible
-        let targetType = args[1];            // Player, Vehicle, Ped или сразу BaseObjectType.id (0, 1, 2)
-        const targetId = args[2];            // id entety которому будет назначен баф (например Player с id=2)
-        let stacksAmmount = parseInt(args[3]) || 1;      //изначальное значение стаков бафа
-        const source =  args[4] || player;    //источник бафа нужен был по тз, функционал есть только у бафа fear
+    applyBuff(player, buffId, targetType, targetId, source, stacks) {
+        //проверяет коретность полученных данных 
+        const {buff, buffName, entity, stacksAmount, buffSource} = this.#validateAllParameters(player, buffId, targetType, targetId, source, stacks);
         const now = Date.now();     //время в которое назначен баф
-
-        //проверка коректности полученных данных, если данные некорректные код дальше не идет
-        
-        //проверяет существует ли баф с таким названием в конфиге, если нет останваливает выполнение кода
-        this.#validate_BuffName(buffName);
-        const buff = this.serverBuffList.get(buffName);
-        //переводит Player, Vehicle, Ped в BaseObjectType.id (при необходимости) и проверяет сущетсует ли такой BaseObjectType.id в конифиге, если нет останваливает выполнение кода
-        targetType = this.#validate_TargetType(targetType, buff.allowedEntities);
-        //проверяет существует ли BaseObjectType с таким id на сервере, если да возвращает этот entity, если нет останваливает выполнение кода
-        const entity = this.#validate_TargetId(targetType, targetId);
-        //проверяет можно ли стакать баф, если нет то стак будет = 1
-        if (buff.stackable === true){
-            stacksAmmount = this.#handleBuffStacking(entity, buffName, stacksAmmount, buff.maxStacks); //меняет кол-во стаков на бафе если оно не максимальное
-        } else { stacksAmmount = 1; }
-        
         //данные которые будут записаны соответвующему entity в соответсвующий buffName
-        const instance = {
+        const buffInstance = {
             buffName: buff.id,
-            stacks: stacksAmmount,
+            stacks: stacksAmount,
             appliedAt: now,
             expiresAt: now + buff.buffDuration,
             lastTickAt: now,
             tickInterval: buff.tickInterval,
-            source: source
+            source: buffSource
         };
 
-        this.activeBuffsStorage.addBuffToMap(entity, buffName, instance);  //записывает баф в класс ActiveBuffsStorage
-        buff.onApply(entity, instance);
+        this.activeBuffsStorage.addBuffToMap(entity, buffName, buffInstance);  //записывает баф в класс ActiveBuffsStorage
+        buff.onApply(entity, buffInstance);
     }
+    //удаляет баф из списка активных а классе хранилище ActiveBuffsStorage и вызывает соответсвующий метод бафа на случай удаления
+    removeBuff(entity, buffId){
+        const buff = this.serverBuffList.get(buffId);
+        if (buff === undefined){
+            throw new Error(`Бафа ${buffId} не существует в списке serverBuffList`);
+        }
+        buff.onRemove(entity, buffId);
+        this.activeBuffsStorage.removeBuffFromMap(entity, buffId);
+    }
+    
+    hasBuff(entity, buffId){
+        return this.activeBuffsStorage.hasActiveBuff(entity, buffId);
+    }
+    
+    getBuffs(entity){
+        return this.activeBuffsStorage.getAllEntityBuffs(entity);
+    }
+    //проверяет коретность полученных данных
+    #validateAllParameters(player, buffId, targetType, targetId, source, stacks){
+        const buffName = String(buffId);    //medicalHelp, drunk, armor_regen, fear, invisible
+        let buffTargetType = targetType;            // Player, Vehicle, Ped или сразу alt.BaseObjectType.id (0, 1, 2)
+        const buffTargetId = targetId;            // id entety которому будет назначен баф (например Player с id=2)
+        const buffSource = source || player || 'defaulBuffSource';    //источник бафа нужен был по тз, функционал есть только у бафа fear
+        let stacksAmount = parseInt(stacks) || 1;      //изначальное значение стаков бафа
 
-    removeBuff(entity, buffName){
+        //проверка коректности полученных данных, если данные некорректные код дальше не идет
+        
+        //проверяет существует ли баф с таким названием в конфиге, если нет останваливает выполнение кода
+        this.#validateBuffName(buffName);
         const buff = this.serverBuffList.get(buffName);
-        buff.onRemove(entity, buffName);
-        this.activeBuffsStorage.removeBuffFromMap(entity, buffName);
-    }
-
-    //изменяет кол-во стаков у бафа в ActiveBuffsStorage при этом не изменяя его время завершения
-    changeStacksAmmountInMap(entity, buffName, newStacks){
-        this.activeBuffsStorage.changeStacksAmmount(entity, buffName, newStacks);
+        //переводит Player, Vehicle, Ped в alt.BaseObjectType.id (при необходимости) и проверяет сущетсует ли такой alt.BaseObjectType.id в конифиге, если нет останваливает выполнение кода
+        buffTargetType = this.#validateTargetType(buffTargetType, buff.allowedEntities);
+        //проверяет существует ли alt.BaseObjectType с таким id на сервере, если да возвращает этот entity, если нет останваливает выполнение кода
+        const entity = this.#validateTargetId(buffTargetType, buffTargetId);
+        //проверяет можно ли стакать баф, если нет то стак будет = 1
+        if (buff.stackable === true){
+            stacksAmount = this.#calculateStacks(entity, buffName, stacksAmount, buff.maxStacks); //меняет кол-во стаков на бафе если оно не максимальное
+        } else { stacksAmount = 1; }
+        //если все проверки пройдены возвращает все обработанные значения
+        return {buff, buffName, entity, stacksAmount, buffSource};
     }
 
     //проверяет существует ли баф с таким названием в конфиге, если нет останваливает выполнение кода
-    #validate_BuffName(buffName){
+    #validateBuffName(buffName){
        if (!this.serverBuffList.has(buffName)) {
-            this.printAllExistingMessage(); //выводит сообщение со списком всех бафов из конфига
+            this.printAllBuffs(); //выводит сообщение со списком всех бафов из конфига
             throw new Error(`Бафа ${buffName} не существует`);
        }
     }
 
-    //переводит Player, Vehicle, Ped в BaseObjectType.id (при необходимости) и проверяет сущетсует ли такой BaseObjectType.id в конифиге, если нет останваливает выполнение кода
-    #validate_TargetType(targetType, allowedEntities){
-        //если targetType записан как название из baseObjectType переводит его в числовое знаенчие по данным из конфига
+    //переводит Player, Vehicle, Ped в alt.BaseObjectType.id (при необходимости) и проверяет сущетсует ли такой alt.BaseObjectType.id в конифиге, если нет останваливает выполнение кода
+    #validateTargetType(targetType, allowedEntities){
+        //если targetType записан как название из alt.BaseObjectType переводит его в числовое знаенчие по данным из конфига
         if (typeof targetType === "string"){
-            targetType = this.baseObjectType[targetType];
+            targetType = alt.BaseObjectType[targetType];
         }
         if (!allowedEntities.includes(targetType)){
-            throw new Error(`baseObjectType ${targetType} не входит в список разрешенных типов entities`);
+            throw new Error(`alt.BaseObjectType ${targetType} не входит в список разрешенных типов entities`);
         }
 
         //если такой entity существует то возвращает его уже в числовом формате (если он был текстовым)
         return targetType;
     }
 
-    //проверяет существует ли BaseObjectType с таким id на сервере, если да возвращает этот entity, если нет останваливает выполнение кода
-    #validate_TargetId(targetType, targetId){
+    //проверяет существует ли alt.BaseObjectType с таким id на сервере, если да возвращает этот entity, если нет останваливает выполнение кода
+    #validateTargetId(targetType, targetId){
         const entity = alt.BaseObject.getByID(targetType, targetId);
 
         if(entity === null){
-            throw new Error('Ошибка в методе #validate_TargetId, запрашиваемый entity не существует');
+            throw new Error('Ошибка в методе #validateTargetId, запрашиваемый entity не существует');
         }
 
         return entity;
@@ -141,20 +110,20 @@ export class BuffManager {
 
     //добавляет к текущему кол-ву стаков то количестов стаков которое было передано как stacks
     //если после этого текщуее кол-во становится большек максимально допустимого кол-ва стаков меняет его на максимальное допустимое кол-во стаков
-    #handleBuffStacking(entity, buffName, stacks, maxAllowedStacks){
-        let stacksAmmount = 0;  //изначальное кол-во стаков бафа в случае если это первая запись о бафе и у него нет никаких стаков
+    #calculateStacks(entity, buffName, stacks, maxAllowedStacks){
+        let stacksAmount = 0;  //изначальное кол-во стаков бафа в случае если это первая запись о бафе и у него нет никаких стаков
         
         if (this.activeBuffsStorage.hasActiveBuff(entity, buffName)){
-            stacksAmmount = this.#getBuffStacksAmmount(entity, buffName);    //получает текуще кол-во стаков этого бафа на entity
+            stacksAmount = this.#getStacksAmount(entity, buffName);    //получает текуще кол-во стаков этого бафа на entity
         }
 
-        stacksAmmount = Math.min(maxAllowedStacks, stacksAmmount + stacks);
+        stacksAmount = Math.min(maxAllowedStacks, stacksAmount + stacks);
 
-        return stacksAmmount;
+        return stacksAmount;
     }
 
     //получает текуще кол-во стаков бафа buffName на entity
-    #getBuffStacksAmmount(entity, buffName){
+    #getStacksAmount(entity, buffName){
         return this.activeBuffsStorage.getEntityBuff(entity, buffName).stacks;
     }
 }

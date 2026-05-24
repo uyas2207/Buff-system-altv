@@ -5,11 +5,8 @@ export class ActiveBuffsStorage {
 
     constructor() {
         this.#allEntitiesActiveBuffsMap = new Map(); // entity
-        
-        alt.on('changeStacksAmmount', (entity, buffName, stacks) => {
-            this.changeStacksAmmount(entity, buffName, stacks);
-        });
     }
+
     //добавить данные о бафе в map
     addBuffToMap(entity, buffName, instance) {
         //если первый раз приходит такой entity
@@ -33,29 +30,6 @@ export class ActiveBuffsStorage {
     getAllEntityBuffs(entity){
         return this.#allEntitiesActiveBuffsMap.get(entity);
     }
-    //метод для дебага (потом можно убрать)
-    printAllActiveBuffs() {
-        this.#allEntitiesActiveBuffsMap.forEach((value, buffRecepient) => {
-            const ent = buffRecepient;
-            //alt.log(ent.id);
-            alt.log(` buffRecepient.id = ${buffRecepient.id}`);
-            alt.log(` buffRecepient.type = ${buffRecepient.type} \n`);
-            value.forEach((data, buffName) => {
-                const recalculatedTime = {
-                    ...data,
-                    appliedAt: new Date(data.appliedAt).toLocaleString(),
-                    expiresAt: new Date(data.expiresAt).toLocaleString(),
-                    lastTickAt: new Date(data.lastTickAt).toLocaleString()
-                };
-                alt.log(`Buff: ${buffName}`, recalculatedTime);
-            });
-        });
-    }
-
-    printSingleBuff(entity){
-        const singleEntity = this.#allEntitiesActiveBuffsMap.get(entity);
-        alt.log('singleEntity', singleEntity);    
-    }
 
     //перебор всех бафов с колбэком
     forEachBuff(callback){
@@ -65,6 +39,7 @@ export class ActiveBuffsStorage {
             });
         });
     }
+    
     //удаляет баф с названием buffName у переданного entity
     removeBuffFromMap(entity, buffName) {
         const entityBuffs = this.#allEntitiesActiveBuffsMap.get(entity);
@@ -79,14 +54,5 @@ export class ActiveBuffsStorage {
         if (entityBuffs.size === 0) {
             this.#allEntitiesActiveBuffsMap.delete(entity);
         }
-        
-        //Дебаг, потом удалить
-        alt.log(`allEntitiesActiveBuffsMap после удаления бафа ${buffName}, у entity.type ${entity.type}, c entity.id ${entity.id}`);
-        this.printAllActiveBuffs();
-    }
-    //изменяет кол-во стаков у бафа в allEntitiesActiveBuffsMap при этом не изменяя его время завершения
-    changeStacksAmmount(entity, buffName, newStacks) {
-        const instance = this.#allEntitiesActiveBuffsMap.get(entity).get(buffName);
-        instance.stacks = newStacks;
     }
 }
