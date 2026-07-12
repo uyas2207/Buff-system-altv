@@ -13,7 +13,7 @@ export class ServerBuffList extends BuffList{
         super()
         this.#clientBuffFilesNames = [];
     }
-    //Соберает все файлы из указанных директорий, которые заканчиваются на Buff.js
+    //Собирает все файлы из указанных директорий, которые заканчиваются на Buff.js
     //запоминает клиентские файлы бафов которые лежат в клиентской директории с клиентской логикой бафов
     //для последующей переадчи на клиент где клиент импортирует файлы с переданными сервером наваниями
     async processAllbuffsFiles(serverBuffsTypesPath, clientBuffsTypesPath){

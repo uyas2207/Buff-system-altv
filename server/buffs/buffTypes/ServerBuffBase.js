@@ -16,4 +16,8 @@ export class ServerBuffBase {
     static onRemove(entity) {
         entity.deleteSyncedMeta(`${this.id}`);
     }
+
+    test(){
+        console.log(`${this.id}, Test`);
+    }
 }
