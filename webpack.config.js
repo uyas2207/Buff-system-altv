@@ -1,6 +1,5 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
-import webpack from 'webpack';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -56,16 +55,6 @@ return [
         minimize: isProduction,
         splitChunks: false
       },
-/*
-      plugins: [
-        new webpack.ProvidePlugin({
-          drawNotification: [
-            path.resolve(__dirname, 'client/utilities/utilities.js'),
-            'drawNotification'
-          ],
-        }),
-      ],
-*/
      devtool: false
     },
 
@@ -99,22 +88,11 @@ return [
       externals: {
         'alt-server': 'alt-server',
         'alt:chat' : 'alt:chat',
-        //'alt-shared': 'alt-shared'
       },
       module: commonModule,
       optimization: {
         minimize: isProduction
       },
-/*
-      plugins: [
-        new webpack.ProvidePlugin({
-          config: [
-            path.resolve(__dirname, 'shared/Shared.js'),
-            'routes'
-          ]
-        }),
-      ],
-*/
       devtool: false
     }
   ];

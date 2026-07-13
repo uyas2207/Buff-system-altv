@@ -11,4 +11,7 @@ export class ClientBuffBase {
     onMetaDelete() {
         console.error('empty onMetaDelete');
     }
+    test(){
+        console.log(`${this.id}, Test`);
+    }
 }

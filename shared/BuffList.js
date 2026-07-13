@@ -10,6 +10,14 @@ export default class BuffList {
             throw new Error(`Buff ${buffClass.id} already registered`);
         }
         this.#buffListServer.set(buffClass.id, buffClass);
+        buffClass.test?.();
+    }
+    
+    async registerAllBuffTypes(files){
+        for (const buffClass of Object.values(files)) {
+            console.log('buffClass', buffClass);
+            this.register(new buffClass);
+        }
     }
 
     get(buffId) {
@@ -25,7 +33,7 @@ export default class BuffList {
         return new Map(this.#buffListServer);
     }
     //импортирует все файлы с названиями переданными в массиве files (все файлы должны находится в одной папке)
-    async registerAllBuffTypes(files){
+/*     async registerAllBuffTypes(files){
         await Promise.all(
             files.map(async file => {
                 const buffClass = await import(`@BuffTypes/${file}`);
@@ -33,6 +41,8 @@ export default class BuffList {
             })
         );
     }
+ */
+
 
     // перебор всех бафов с колбэком
     forEachBuff(callback) {
