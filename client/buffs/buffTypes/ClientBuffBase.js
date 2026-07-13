@@ -1,13 +1,14 @@
 export class ClientBuffBase {
-    static id = null;
+
+    get id () { return 'defaultClientBuffName';}
     
-    static onMetaChange() {
+    onMetaChange() {
         console.error('empty onMetaChange');
     }
-    static onEntityCreate() {
+    onEntityCreate() {
         console.error('empty onEntityCreate');
     }
-    static onMetaDelete() {
+    onMetaDelete() {
         console.error('empty onMetaDelete');
     }
 }

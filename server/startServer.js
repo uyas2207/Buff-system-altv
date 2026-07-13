@@ -31,17 +31,11 @@ class BuffServer {
             this.serverBuffList.sendClientBuffList(player);
         });
 
-        alt.on('resourceStart', () => {
+        alt.on('resourceStart', async () => {
             this.commandManager.registerCommands();
             //Соберает все файлы из указанных директорий
             this.serverBuffList.processAllbuffsFiles('./resources/buff-system/server/buffs/buffTypes', './resources/buff-system/client/buffs/buffTypes');
             this.#createDemonstrationScene();
-        });
-
-        alt.on('consoleCommand', (command, arg) => {
-            if (command === 'hp'){
-                alt.BaseObject.getByID(2, 1).health = arg[0];
-            }
         });
     }
 

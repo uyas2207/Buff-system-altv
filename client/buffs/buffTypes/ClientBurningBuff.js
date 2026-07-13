@@ -5,33 +5,33 @@ import { ClientBuffBase } from './ClientBuffBase.js';
 import { BuffIds } from '@shared/SharedConfig.js';
 
 export default class ClientBurningBuff extends ClientBuffBase {
-    static id = BuffIds.BURNING;
+    get id () { return BuffIds.BURNING; }
 
-    static #BONE_NAME = 'bonnet'; //кость автомобиля к которой будет привязан огонь
+    get #BONE_NAME () { return 'bonnet';} //кость автомобиля к которой будет привязан огонь
 
-    static onEntityCreate(entity) {
+    onEntityCreate(entity) {
         this.#applyFire(entity);
     }
 
-    static onMetaChange(entity) {
+    onMetaChange(entity) {
         this.#applyFire(entity);
     }
 
-    static onMetaDelete(entity) {
+    onMetaDelete(entity) {
         this.#stopFire(entity);
     }
     
-    static #applyFire(entity){
+    #applyFire(entity){
         if (entity.type === alt.BaseObjectType.LocalPlayer || entity.type === alt.BaseObjectType.Ped) {
             native.startEntityFire(entity.scriptID);
         }
         if(entity.type === alt.BaseObjectType.Vehicle){
-            const fxHandle = this.#setVehicleOnFire(entity, ClientBurningBuff.#BONE_NAME);
+            const fxHandle = this.#setVehicleOnFire(entity, this.#BONE_NAME);
             entity.setMeta('vehFire', fxHandle);
         }
     }
 
-    static #stopFire(entity){
+    #stopFire(entity){
         if (entity.type === alt.BaseObjectType.LocalPlayer || entity.type === alt.BaseObjectType.Ped) {
             native.stopEntityFire(entity.scriptID);
         }
@@ -42,7 +42,7 @@ export default class ClientBurningBuff extends ClientBuffBase {
         }     
     }
 
-    static #setVehicleOnFire(vehicle, boneName){
+    #setVehicleOnFire(vehicle, boneName){
         const boneIndex = native.getEntityBoneIndexByName(vehicle.scriptID, boneName); 
         native.useParticleFxAsset('core');
         const fxHandle = native.startParticleFxLoopedOnEntityBone(
@@ -57,7 +57,7 @@ export default class ClientBurningBuff extends ClientBuffBase {
         return fxHandle;
     }
 
-    static #stopAttachedVehicleFire(fxHandle) {
+    #stopAttachedVehicleFire(fxHandle) {
         native.stopParticleFxLooped(fxHandle, false);
         native.removeParticleFx(fxHandle, false);
     }

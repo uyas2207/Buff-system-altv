@@ -3,9 +3,9 @@ import { ClientBuffBase } from './ClientBuffBase.js';
 import { BuffIds } from '@shared/SharedConfig.js';
 
 export default class ClientNitroBoostBuff extends ClientBuffBase {
-    static id = BuffIds.NITROBOOST;
+    get id () { return BuffIds.NITROBOOST; }
 
-    static onEntityCreate(entity) {
+    onEntityCreate(entity) {
         native.setOverrideNitrousLevel(
             entity.scriptID,
             true,
@@ -16,7 +16,7 @@ export default class ClientNitroBoostBuff extends ClientBuffBase {
         );
     }
 
-    static onMetaChange(entity) {
+    onMetaChange(entity) {
         native.setOverrideNitrousLevel(
             entity.scriptID,
             true,
@@ -27,7 +27,7 @@ export default class ClientNitroBoostBuff extends ClientBuffBase {
         );
     }
 
-    static onMetaDelete(entity) {
+    onMetaDelete(entity) {
         native.setOverrideNitrousLevel(entity.scriptID, false, 0, 0, 0, false);
     }
 }

@@ -4,10 +4,10 @@ import { ServerBuffBase } from './ServerBuffBase.js'
 import { BuffIds } from '@shared/SharedConfig.js'
 
 export default class NitroBoost extends ServerBuffBase {
-    static id = BuffIds.NITROBOOST;
-    static allowedEntities = [alt.BaseObjectType.Vehicle];
-    static stackable = false;
-    static maxStacks = 1;
+    get id () { return BuffIds.NITROBOOST; }
+    get allowedEntities () { return [alt.BaseObjectType.Vehicle]; }
+    get stackable () { return false; }
+    get maxStacks () { return 1; }
 
     //методы onApply и onRemove у этого бафа стандартные (просто добавляет и удаляет SyncedMeta) и берутся из ServerBuffBase
 }

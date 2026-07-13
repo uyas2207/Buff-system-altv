@@ -3,17 +3,17 @@ import { ClientBuffBase } from './ClientBuffBase.js';
 import { BuffIds } from '@shared/SharedConfig.js';
 
 export default class ClientInvisibleBuff extends ClientBuffBase {
-    static id = BuffIds.INVISIBLE;
+    get id () { return BuffIds.INVISIBLE;}
 
-    static onEntityCreate(entity, value) {
+    onEntityCreate(entity, value) {
         native.setEntityVisible(entity.scriptID, !value, 0);
     }
 
-    static onMetaChange(entity, value) {
+    onMetaChange(entity, value) {
         native.setEntityVisible(entity.scriptID, !value, 0);
     }
 
-    static onMetaDelete(entity) {
+    onMetaDelete(entity) {
         native.setEntityVisible(entity.scriptID, true, 0);
     }
 }

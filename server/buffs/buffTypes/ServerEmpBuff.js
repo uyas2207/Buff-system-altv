@@ -4,17 +4,19 @@ import { ServerBuffBase } from './ServerBuffBase.js'
 import { BuffIds } from '@shared/SharedConfig.js'
 
 export default class EmpBuff extends ServerBuffBase {
-    static id = BuffIds.EMP;
-    static allowedEntities = [alt.BaseObjectType.Vehicle];
-    static stackable = false;
-    static maxStacks = 1;
+    get id () { return BuffIds.EMP; }
+    get allowedEntities () { return [alt.BaseObjectType.Vehicle]; }
+    get stackable () { return false; }
+    get maxStacks () { return 1; }
 //так как у двигателя хп = 0 игрок не сможет завести двигатель автомобиля
-    static onApply(entity) {
+    onApply(entity) {
+        console.log(`TestLog onApply ${this.id}`);
         entity.engineHealth = 0;
         entity.engineOn = false;
     }
 
-    static onRemove(entity) {
+    onRemove(entity) {
+        console.log(`TestLog onRemove ${this.id}`);
         entity.engineHealth = 1000;
         entity.engineOn = true;
     }

@@ -3,17 +3,17 @@ import { ClientBuffBase } from './ClientBuffBase.js';
 import { BuffIds } from '@shared/SharedConfig.js';
 
 export default class ClientFearBuff extends ClientBuffBase {
-    static id = BuffIds.FEAR;
+    get id () { return BuffIds.FEAR;}
 
-    static onEntityCreate(entity, source) {
+    onEntityCreate(entity, source) {
         native.taskReactAndFleePed(entity.scriptID, source.scriptID);
     }
 
-    static onMetaChange(entity, source) {
+    onMetaChange(entity, source) {
         native.taskReactAndFleePed(entity.scriptID, source.scriptID);
     }
 
-    static onMetaDelete(entity) {
+    onMetaDelete(entity) {
         native.clearPedTasksImmediately(entity.scriptID);
     }
 }

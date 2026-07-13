@@ -1,41 +1,42 @@
 export default class BuffList {
-    #buffList;
+    #buffListServer;
 
     constructor(){
-        this.#buffList = new Map();
+        this.#buffListServer = new Map();
     }
     
     register(buffClass) {
-        if (this.#buffList.has(buffClass.id)) {
+        if (this.#buffListServer.has(buffClass.id)) {
             throw new Error(`Buff ${buffClass.id} already registered`);
         }
-        this.#buffList.set(buffClass.id, buffClass);
+        this.#buffListServer.set(buffClass.id, buffClass);
     }
 
     get(buffId) {
-        return this.#buffList.get(buffId);
+        return this.#buffListServer.get(buffId);
     }
 
     has(buffId) {
-        return this.#buffList.has(buffId);
+        return this.#buffListServer.has(buffId);
     }
 
     getAll() {
-        return this.#buffList;
+        //так как возвращается не сама Map, а ее копия неполучится изменять значения внутри #buffListServer
+        return new Map(this.#buffListServer);
     }
     //импортирует все файлы с названиями переданными в массиве files (все файлы должны находится в одной папке)
     async registerAllBuffTypes(files){
         await Promise.all(
             files.map(async file => {
                 const buffClass = await import(`@BuffTypes/${file}`);
-                this.register(buffClass.default);
+                this.register(new buffClass.default);
             })
         );
     }
 
     // перебор всех бафов с колбэком
     forEachBuff(callback) {
-        this.#buffList.forEach((value, key) => {
+        this.#buffListServer.forEach((value, key) => {
             callback(value, key);
         });
     }
