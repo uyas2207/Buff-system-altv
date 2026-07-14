@@ -9,13 +9,13 @@ import { ActiveBuffsStorage } from './buffs/ActiveBuffsStorage.js'
 import { BuffManager } from './buffs/BuffManager.js'
 import { BuffTickManager } from './buffs/BuffTickManager.js'
 
-import { default as BuffList } from '../shared/BuffList.js'
-import { ServerBuffs } from '../shared/SharedConfig.js'
+import ServerBuffList from '../shared/BuffList.js'
+import { ServerBuffs } from './config/serverBuffsConfig.js'
 
 class BuffServer {
     constructor(){
         this.activeBuffsStorage = new ActiveBuffsStorage();
-        this.buffList = new BuffList();
+        this.buffList = new ServerBuffList();
 
         this.pedManager = new PedManager(defaultPedParameters, npcs);       
         
@@ -29,13 +29,10 @@ class BuffServer {
     #init(){
         alt.on('playerConnect', (player) => {
             player.spawn(-1269.91, -1438.64, 4.46);
-            //this.buffList.sendClientbuffList(player);
         });
 
         alt.on('resourceStart', async () => {
             this.commandManager.registerCommands();
-            //Соберает все файлы из указанных директорий
-            //this.buffList.processAllbuffsFiles('./resources/buff-system/server/buffs/buffTypes', './resources/buff-system/client/buffs/buffTypes');
             this.buffList.registerAllBuffTypes(ServerBuffs);
             this.#createDemonstrationScene();
         });

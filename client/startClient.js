@@ -1,9 +1,10 @@
 import * as alt from 'alt-client';
 
 import { AnimationManager } from './AnimationManager.js';
-import { ClientBuffManager } from './ClientBuffManager.js'
+import { ClientBuffManager } from './ClientBuffManager.js';
 
-import { default as ClientBuffList } from '@shared/BuffList.js'
+import ClientBuffList from '@shared/BuffList.js';
+import { ClientBuffs } from './config/clientBuffsConfig.js'
 
 class BuffClient {
     constructor(){
@@ -14,9 +15,7 @@ class BuffClient {
     }
 
     #init(){
-        alt.onServer('buffs:registerClientBuffs', async (clientBuffFilesNames) => {
-            await this.clientBuffList.registerAllBuffTypes(clientBuffFilesNames);
-        });
+        this.clientBuffList.registerAllBuffTypes(ClientBuffs);
     }
 }
 

@@ -11,7 +11,7 @@ export default class FearBuff extends ServerBuffBase {
 
     onApply(entity, instance) {
         console.log(`TestLog onApply ${this.id}`);
-        entity.setSyncedMeta(`${this.id}`, instance.source);
+        entity.setStreamSyncedMeta(`${this.id}`, instance.source);
     }
-    //метод onRemove у этого бафа стандартный (просто удаляет SyncedMeta) и берется из ServerBuffBase
+    //метод onRemove у этого бафа стандартный (просто удаляет StreamSyncedMeta) и берется из ServerBuffBase
 }

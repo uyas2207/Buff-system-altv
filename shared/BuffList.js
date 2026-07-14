@@ -32,16 +32,6 @@ export default class BuffList {
         //так как возвращается не сама Map, а ее копия неполучится изменять значения внутри #buffListServer
         return new Map(this.#buffListServer);
     }
-    //импортирует все файлы с названиями переданными в массиве files (все файлы должны находится в одной папке)
-/*     async registerAllBuffTypes(files){
-        await Promise.all(
-            files.map(async file => {
-                const buffClass = await import(`@BuffTypes/${file}`);
-                this.register(new buffClass.default);
-            })
-        );
-    }
- */
 
 
     // перебор всех бафов с колбэком

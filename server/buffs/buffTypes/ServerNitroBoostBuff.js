@@ -9,5 +9,5 @@ export default class NitroBoost extends ServerBuffBase {
     get stackable () { return false; }
     get maxStacks () { return 1; }
 
-    //методы onApply и onRemove у этого бафа стандартные (просто добавляет и удаляет SyncedMeta) и берутся из ServerBuffBase
+    //методы onApply и onRemove у этого бафа стандартные (просто добавляет и удаляет StreamSyncedMeta) и берутся из ServerBuffBase
 }

@@ -11,7 +11,7 @@ export default class DrunkBuff extends ServerBuffBase {
 
     onApply(entity, instance) {
         console.log(`TestLog onApply ${this.id}`);
-        entity.setSyncedMeta(`${this.id}`, instance.stacks);
+        entity.setStreamSyncedMeta(`${this.id}`, instance.stacks);
     }
-    //метод onRemove у этого бафа стандартный (просто удаляет SyncedMeta) и берется из ServerBuffBase
+    //метод onRemove у этого бафа стандартный (просто удаляет StreamSyncedMeta) и берется из ServerBuffBase
 }

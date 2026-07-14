@@ -8,5 +8,5 @@ export default class BurningBuff extends ServerBuffBase {
     get allowedEntities () { return [alt.BaseObjectType.Player, alt.BaseObjectType.Ped, alt.BaseObjectType.Vehicle]; }
     get stackable () { return false; }
     get maxStacks () { return 1; }
-    //методы onApply и onRemove у этого бафа стандартные (просто добавляет и удаляет SyncedMeta) и берутся из ServerBuffBase
+    //методы onApply и onRemove у этого бафа стандартные (просто добавляет и удаляет StreamSyncedMeta) и берутся из ServerBuffBase
 }

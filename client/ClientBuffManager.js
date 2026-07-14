@@ -11,26 +11,24 @@ export class ClientBuffManager {
             this.#handleEntityCreate(entity);
         });
 
-        alt.on('syncedMetaChange', (entity, metaKey, value, oldValue) => {
-            //Если объект не находится в стрим зоне у него scriptID === 0 и к нему нет смысла применять нативные функции которые применялись бы если бы он был в стрим зоне
-            if (entity.scriptID === 0) return;
-            this.#handleSyncedMetaChange(entity, metaKey, value, oldValue);
+        alt.on('streamSyncedMetaChange', (entity, metaKey, value, oldValue) => {
+            this.#handleStreamSyncedMetaChange(entity, metaKey, value, oldValue);
         });
     }
 
     #handleEntityCreate(entity){
         this.clientBuffList.forEachBuff((handler, metaKey) => {
             //если в будующем SyncMeta будет использоваться не только для системы бафов 
-            if (!entity.hasSyncedMeta(metaKey)) return;
+            if (!entity.hasStreamSyncedMeta(metaKey)) return;
 
-            const value = entity.getSyncedMeta(metaKey);
+            const value = entity.getStreamSyncedMeta(metaKey);
             if (value === undefined) return;
 
             handler.onEntityCreate(entity, value);
         });
     }
 
-    #handleSyncedMetaChange(entity, metaKey, value, oldValue){
+    #handleStreamSyncedMetaChange(entity, metaKey, value, oldValue){
         const handler = this.clientBuffList.get(metaKey);
         //если SyncMeta была установлена не для системы бафов
         if (!handler) return;
